@@ -1,2 +1,5 @@
 django
 pillow
+ruff
+psycopg2-binary
+dotenv

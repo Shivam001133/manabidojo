@@ -40,7 +40,8 @@ DJANGO_APPS = [
 ]
 THIRD_PARTY_APPS = []
 LOCAL_APPS = [
-    "manabhi_dojo.users"
+    "manabhi_dojo.users",
+    "manabhi_dojo.languages"
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
