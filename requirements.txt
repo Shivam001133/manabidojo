@@ -4,3 +4,4 @@ ruff
 psycopg2-binary
 dotenv
 dj_database_url
+gtts
