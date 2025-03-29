@@ -22,4 +22,5 @@ from manabhi_dojo.users import urls as users_urls
 urlpatterns = [
     path('', include(users_urls)),
     path('admin/', admin.site.urls),
+    path('', include('django.contrib.auth.urls')),
 ]

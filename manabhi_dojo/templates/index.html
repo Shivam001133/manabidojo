@@ -1,1 +1,18 @@
-<h1>Manabi Dojo</h1>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block style %}{% endblock %}
+{% block body %}
+<div class="loader"></div>
+<div id="app">
+  <div class="main-wrapper main-wrapper-1">
+    <div class="navbar-bg"></div>
+    {% include "navbar.html" %}
+    {% include "sidebar.html" %}
+    <!-- Main Content -->
+    {% block content %}{% endblock content %}
+    {% include "footer.html" %}
+  </div>
+</div>
+{% endblock %}
+{% block script %}{% endblock %}

@@ -1,13 +1,15 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import QuerySet
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView
 from django.views.generic import RedirectView
 from django.views.generic import UpdateView
+from django.contrib.auth import login
 
+from manabhi_dojo.users.forms import SignUpForm
 from manabhi_dojo.users.models import User
 
 
@@ -48,3 +50,17 @@ user_redirect_view = UserRedirectView.as_view()
 
 def home_view(request):
     return render(request, 'index.html')
+
+
+def signup(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('/home')
+    else:
+        form = SignUpForm()
+
+    return render(
+        request, 'registration/signup.html', {'form': form})
