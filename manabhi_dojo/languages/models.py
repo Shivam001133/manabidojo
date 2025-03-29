@@ -17,6 +17,8 @@ class Character(models.Model):
     meaning = models.CharField(max_length=100, blank=True, null=True)
     example_word = models.CharField(max_length=100, blank=True, null=True)
     audio = models.FileField(upload_to='character_audio/', blank=True, null=True)
+    order = models.PositiveIntegerField(default=0)
+
 
     def __str__(self):
         return self.symbol

@@ -1,51 +1,61 @@
 {% extends "index.html" %}
 {% load static %}
-{% block title %}Add Patient{% endblock %}
+
+{% block title %}Katakana Chart{% endblock %}
+
 {% block style %}
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <style>
-  .card-3d {
-    perspective: 1000px;
+  .flip-card {
+    transition: all 0.3s ease;
+    will-change: transform, background-color, box-shadow;
   }
 
-  .card-3d-inner {
-    transition: transform 0.5s;
-    transform-style: preserve-3d;
+  .hover-effect:hover {
+    background-color: #fde68a; /* soft yellow */
+    box-shadow: 0 4px 20px rgba(253, 224, 71, 0.5);
+    transform: scale(1.07);
+    z-index: 10;
   }
 
-  .card-3d:hover .card-3d-inner {
-    transform: rotateY(10deg) rotateX(10deg);
+  .hover-effect {
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   }
 </style>
 {% endblock %}
-{% block content %}
-<div class="main-content">
+
+{% block body %}
+<div class="p-6 md:p-10 bg-white min-h-screen">
   <div class="text-center mb-10">
-    <h1 class="text-4xl font-bold mb-2 text-yellow-600">Katakana Chart</h1>
-    <p class="text-sm text-gray-500">Presented by Flexi Classes</p>
+    <h1 class="text-4xl font-extrabold text-yellow-600 mb-2">Katakana Chart</h1>
+    <p class="text-gray-500">Presented by Flexi Classes</p>
   </div>
 
-  <div class="overflow-x-auto">
-    <div class="grid grid-cols-11 gap-4 justify-center max-w-7xl mx-auto">
-      <!-- Column labels -->
+  <div class="overflow-x-auto max-w-7xl mx-auto">
+    <div class="grid grid-cols-6 sm:grid-cols-11 gap-3 sm:gap-4" id="katakana-grid">
+      <!-- Top header row -->
       <div></div>
-      <div class="text-center font-bold text-lg">w</div>
-      <div class="text-center font-bold text-lg">r</div>
-      <div class="text-center font-bold text-lg">y</div>
-      <div class="text-center font-bold text-lg">m</div>
-      <div class="text-center font-bold text-lg">h</div>
-      <div class="text-center font-bold text-lg">n</div>
-      <div class="text-center font-bold text-lg">t</div>
-      <div class="text-center font-bold text-lg">s</div>
-      <div class="text-center font-bold text-lg">k</div>
-      <div class="text-center font-bold text-lg">a</div>
-
-      <!-- a-row -->
-      <div class="font-bold text-lg">a</div>
-      {% for sym in symbols %}
-      <div class="card-3d"><div class="card-3d-inner bg-yellow-200 p-4 rounded-xl shadow-2xl text-center text-blue-900 font-bold text-4xl">{{ sym.symbol }}<br><span class="text-sm font-normal block text-black">{{ sym.romaji }}</span></div></div>
+      {% for col in consonants %}
+        <div class="text-center text-base sm:text-lg font-semibold text-gray-700 uppercase">{{ col }}</div>
       {% endfor %}
-      <!-- Additional rows (i, u, e, o) would follow same structure -->
+
+      {% for row in katakana_rows %}
+        <div class="text-center text-base sm:text-lg font-semibold text-gray-700 uppercase">{{ row.vowel }}</div>
+        {% for char in row.characters %}
+        <!-- Group parent for hover sync -->
+        <div class="group bg-white rounded-xl shadow-lg p-4 flex flex-col items-center justify-center transition-all transform hover:scale-105 hover:shadow-2xl hover:bg-yellow-100">
+          {% if char.symbol %}
+            <!-- Inner symbol box with group-hover sync -->
+            <div class="w-16 h-16 flex items-center justify-center bg-white rounded-xl shadow-md transition-colors duration-200 group-hover:bg-yellow-200">
+              <div class="text-purple-600 text-3xl sm:text-4xl font-bold">{{ char.symbol }}</div>
+            </div>
+            <div class="mt-2 text-purple-500 text-sm sm:text-base font-semibold tracking-wide">{{ char.romaji }}</div>
+          {% else %}
+            <div class="h-10 sm:h-12"></div>
+          {% endif %}
+        </div>        
+        {% endfor %}
+      {% endfor %}
     </div>
   </div>
 </div>
