@@ -1,13 +1,12 @@
-import os
+from pathlib import Path
 
-def sqllite(BASE_DIR: str):
-    # Database
-    # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-    os.makedirs("db", exist_ok=True)
-    db_dir = os.path.join(BASE_DIR, "db")
+def sqlite(BASE_DIR: Path):
+    # Ensure db directory exists
+    db_dir = BASE_DIR / "db"
+    db_dir.mkdir(exist_ok=True)
 
-    DATABASES = {
+    return {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': db_dir / 'db.sqlite3',
