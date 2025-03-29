@@ -17,6 +17,4 @@ def sqlite(BASE_DIR: Path):
 
 
 def postgres()-> dj_database_url:
-    print("*"*100)
-    print(environ.get('DATABASE_URL'))
     return dj_database_url.config(default=environ.get('DATABASE_URL'))
