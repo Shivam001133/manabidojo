@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from your_app.models import LanguageScript, Character
+from manabhi_dojo.languages.models import LanguageScript, Character
 
 
 class Command(BaseCommand):

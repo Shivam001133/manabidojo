@@ -20,8 +20,7 @@ class User(AbstractUser):
     name = models.CharField(_("Name of User"), blank=True, max_length=255)
     email = models.EmailField(_("email address"), unique=True)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ["email",]
 
     objects: ClassVar[UserManager] = UserManager()
 

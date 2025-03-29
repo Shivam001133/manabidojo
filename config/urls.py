@@ -17,10 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from manabhi_dojo.users import urls as users_urls
+from manabhi_dojo.languages import urls as languages_urls
 
 
 urlpatterns = [
     path('', include(users_urls)),
     path('admin/', admin.site.urls),
+    path('languages/', include(languages_urls)),
     path('', include('django.contrib.auth.urls')),
 ]

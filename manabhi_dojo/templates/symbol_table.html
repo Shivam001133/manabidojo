@@ -1,0 +1,52 @@
+{% extends "index.html" %}
+{% load static %}
+{% block title %}Add Patient{% endblock %}
+{% block style %}
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<style>
+  .card-3d {
+    perspective: 1000px;
+  }
+
+  .card-3d-inner {
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+  }
+
+  .card-3d:hover .card-3d-inner {
+    transform: rotateY(10deg) rotateX(10deg);
+  }
+</style>
+{% endblock %}
+{% block content %}
+<div class="main-content">
+  <div class="text-center mb-10">
+    <h1 class="text-4xl font-bold mb-2 text-yellow-600">Katakana Chart</h1>
+    <p class="text-sm text-gray-500">Presented by Flexi Classes</p>
+  </div>
+
+  <div class="overflow-x-auto">
+    <div class="grid grid-cols-11 gap-4 justify-center max-w-7xl mx-auto">
+      <!-- Column labels -->
+      <div></div>
+      <div class="text-center font-bold text-lg">w</div>
+      <div class="text-center font-bold text-lg">r</div>
+      <div class="text-center font-bold text-lg">y</div>
+      <div class="text-center font-bold text-lg">m</div>
+      <div class="text-center font-bold text-lg">h</div>
+      <div class="text-center font-bold text-lg">n</div>
+      <div class="text-center font-bold text-lg">t</div>
+      <div class="text-center font-bold text-lg">s</div>
+      <div class="text-center font-bold text-lg">k</div>
+      <div class="text-center font-bold text-lg">a</div>
+
+      <!-- a-row -->
+      <div class="font-bold text-lg">a</div>
+      {% for sym in symbols %}
+      <div class="card-3d"><div class="card-3d-inner bg-yellow-200 p-4 rounded-xl shadow-2xl text-center text-blue-900 font-bold text-4xl">{{ sym.symbol }}<br><span class="text-sm font-normal block text-black">{{ sym.romaji }}</span></div></div>
+      {% endfor %}
+      <!-- Additional rows (i, u, e, o) would follow same structure -->
+    </div>
+  </div>
+</div>
+{% endblock %}
