@@ -4,5 +4,5 @@ from . import views
 app_name = "languages"
 
 urlpatterns = [
-    path("katakana/", views.KatakanaView, name="katakana"),
+    path("katakana/", views.katakana_view, name="katakana"),
 ]

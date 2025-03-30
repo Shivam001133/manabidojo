@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 from manabhi_dojo.users import urls as users_urls
@@ -24,10 +25,10 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
-    path('', include(users_urls)),
-    path('admin/', admin.site.urls),
-    path('languages/', include(languages_urls)),
-    path('', include('django.contrib.auth.urls')),
+    path("", include(users_urls)),
+    path("admin/", admin.site.urls),
+    path("languages/", include(languages_urls)),
+    path("", include("django.contrib.auth.urls")),
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
 

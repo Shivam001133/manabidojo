@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('languages', '0002_kanji'),
+        ("languages", "0002_kanji"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='character',
-            name='order',
+            model_name="character",
+            name="order",
             field=models.PositiveIntegerField(default=0),
         ),
     ]

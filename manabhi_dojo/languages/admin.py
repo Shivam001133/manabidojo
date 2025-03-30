@@ -19,14 +19,24 @@ class LanguageScriptAdmin(admin.ModelAdmin):
 
 @admin.register(Character)
 class CharacterAdmin(admin.ModelAdmin):
-    list_display = ("symbol", "romaji", "script", "meaning", "example_word", "audio_preview")
+    list_display = (
+        "symbol",
+        "romaji",
+        "script",
+        "meaning",
+        "example_word",
+        "audio_preview",
+    )
     search_fields = ("symbol", "romaji", "example_word", "meaning")
     list_filter = ("script",)
 
     def audio_preview(self, obj):
         if obj.audio:
-            return format_html(f'<audio controls><source src="{obj.audio.url}" type="audio/mpeg">No audio</audio>')
+            return format_html(
+                f'<audio controls><source src="{obj.audio.url}" type="audio/mpeg">No audio</audio>'
+            )
         return "—"
+
     audio_preview.short_description = "Audio"
 
 
@@ -46,12 +56,19 @@ class KanjiAdmin(admin.ModelAdmin):
     readonly_fields = ("character", "audio_player")
 
     fieldsets = (
-        (None, {
-            "fields": ("character", "onyomi", "kunyomi", "meaning")
-        }),
-        ("Details", {
-            "fields": ("jlpt_level", "grade", "stroke_count", "audio", "audio_player")
-        }),
+        (None, {"fields": ("character", "onyomi", "kunyomi", "meaning")}),
+        (
+            "Details",
+            {
+                "fields": (
+                    "jlpt_level",
+                    "grade",
+                    "stroke_count",
+                    "audio",
+                    "audio_player",
+                )
+            },
+        ),
     )
 
     def audio_player(self, obj):

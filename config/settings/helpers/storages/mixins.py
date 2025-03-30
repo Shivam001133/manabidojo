@@ -30,8 +30,7 @@ class DefaultACLMixin:
     def get_default_acl(self):
         _acl = self.default_acl or None
         exception_message = (
-            f'The default_acl of "{_acl}" is invalid.'
-            "Please use one of the following:"
+            f'The default_acl of "{_acl}" is invalid.Please use one of the following:'
         )
         if _acl is not None:
             if _acl not in self.CANNED_ACL_OPTIONS:

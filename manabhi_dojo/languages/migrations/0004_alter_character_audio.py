@@ -5,15 +5,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('languages', '0003_character_order'),
+        ("languages", "0003_character_order"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='character',
-            name='audio',
-            field=models.FileField(blank=True, null=True, upload_to=manabhi_dojo.languages.models.character_audio_upload_path),
+            model_name="character",
+            name="audio",
+            field=models.FileField(
+                blank=True,
+                null=True,
+                upload_to=manabhi_dojo.languages.models.character_audio_upload_path,
+            ),
         ),
     ]

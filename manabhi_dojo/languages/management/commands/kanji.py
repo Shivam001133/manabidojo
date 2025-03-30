@@ -1,7 +1,6 @@
 import io
 import requests
 from django.core.management.base import BaseCommand
-from django.conf import settings
 from gtts import gTTS
 from django.core.files.base import ContentFile
 from manabhi_dojo.languages.models import Kanji
@@ -24,17 +23,21 @@ class Command(BaseCommand):
             kanji_obj.audio.save(upload_path, ContentFile(buffer.read()))
             kanji_obj.save()
             self.stdout.write(f"🎵 Audio uploaded to: {kanji_obj.audio.name}")
-        except Exception as e:
-            self.stdout.write(self.style.WARNING(f"⚠️ Audio generation failed for {kanji_obj.character}: {e}"))
+        except Exception as e:  # noqa: BLE001
+            self.stdout.write(
+                self.style.WARNING(
+                    f"⚠️ Audio generation failed for {kanji_obj.character}: {e}"
+                )
+            )
 
     def handle(self, *args, **kwargs):
         url = "https://raw.githubusercontent.com/davidluzgouveia/kanji-data/master/kanji.json"
 
         try:
-            response = requests.get(url)
+            response = requests.get(url, timeout=10)
             response.raise_for_status()
             kanji_data = response.json()
-        except Exception as e:
+        except Exception as e:  # noqa: F401 BLE001 RUF100
             self.stdout.write(self.style.ERROR(f"❌ Failed to fetch Kanji data: {e}"))
             return
 
@@ -42,9 +45,9 @@ class Command(BaseCommand):
         skipped = 0
 
         for character, details in kanji_data.items():
-            onyomi = ', '.join(details.get("readings_on", []))
-            kunyomi = ', '.join(details.get("readings_kun", []))
-            meaning = ', '.join(details.get("meanings", []))
+            onyomi = ", ".join(details.get("readings_on", []))
+            kunyomi = ", ".join(details.get("readings_kun", []))
+            meaning = ", ".join(details.get("meanings", []))
             jlpt_level = details.get("jlpt_new")
             grade = details.get("grade")
             stroke_count = details.get("strokes")
@@ -58,7 +61,7 @@ class Command(BaseCommand):
                     "jlpt_level": jlpt_level,
                     "grade": grade,
                     "stroke_count": stroke_count,
-                }
+                },
             )
 
             if created or not obj.audio:
@@ -69,4 +72,6 @@ class Command(BaseCommand):
                 self.stdout.write(f"⏭ Skipped (exists): {character}")
                 skipped += 1
 
-        self.stdout.write(self.style.SUCCESS(f"✅ Finished: {added} added, {skipped} skipped."))
+        self.stdout.write(
+            self.style.SUCCESS(f"✅ Finished: {added} added, {skipped} skipped.")
+        )

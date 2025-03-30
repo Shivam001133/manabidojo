@@ -20,7 +20,9 @@ class User(AbstractUser):
     name = models.CharField(_("Name of User"), blank=True, max_length=255)
     email = models.EmailField(_("email address"), unique=True)
 
-    REQUIRED_FIELDS = ["email",]
+    REQUIRED_FIELDS = [
+        "email",
+    ]
 
     objects: ClassVar[UserManager] = UserManager()
 
@@ -32,14 +34,11 @@ class User(AbstractUser):
 
         """
         return reverse("users:detail", kwargs={"pk": self.id})
-    
 
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='profile'
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
     )
     full_name = models.CharField(max_length=255, blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
@@ -50,4 +49,3 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.full_name or self.user.email or f"Profile #{self.pk}"
-

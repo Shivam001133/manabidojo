@@ -48,8 +48,9 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 
 user_redirect_view = UserRedirectView.as_view()
 
+
 def home_view(request):
-    return render(request, 'index.html')
+    return render(request, "index.html")
 
 
 def signup(request):
@@ -58,9 +59,8 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('/home')
+            return redirect("/home")
     else:
         form = SignUpForm()
 
-    return render(
-        request, 'registration/signup.html', {'form': form})
+    return render(request, "registration/signup.html", {"form": form})
