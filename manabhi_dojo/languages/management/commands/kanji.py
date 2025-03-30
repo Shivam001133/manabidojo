@@ -1,29 +1,47 @@
-import os
+import io
 import requests
 from django.core.management.base import BaseCommand
 from django.conf import settings
+from gtts import gTTS
+from django.core.files.base import ContentFile
 from manabhi_dojo.languages.models import Kanji
 
+
 class Command(BaseCommand):
-    help = "Import Kanji data from the updated dataset into kanji_master table with optional audio"
+    help = "Import Kanji data and generate audio saved to R2 bucket."
+
+    def generate_audio_for_kanji(self, kanji_obj):
+        """Generates and uploads audio to kanji_audio/<character>.mp3 in R2."""
+        try:
+            tts = gTTS(text=kanji_obj.character, lang="ja")
+            buffer = io.BytesIO()
+            tts.write_to_fp(buffer)
+            buffer.seek(0)
+
+            filename = f"{kanji_obj.character}.mp3"
+            upload_path = f"kanji_audio/{filename}"
+
+            kanji_obj.audio.save(upload_path, ContentFile(buffer.read()))
+            kanji_obj.save()
+            self.stdout.write(f"🎵 Audio uploaded to: {kanji_obj.audio.name}")
+        except Exception as e:
+            self.stdout.write(self.style.WARNING(f"⚠️ Audio generation failed for {kanji_obj.character}: {e}"))
 
     def handle(self, *args, **kwargs):
         url = "https://raw.githubusercontent.com/davidluzgouveia/kanji-data/master/kanji.json"
+
         try:
             response = requests.get(url)
             response.raise_for_status()
             kanji_data = response.json()
         except Exception as e:
-            self.stdout.write(self.style.ERROR(f"❌ Error fetching or parsing JSON: {e}"))
+            self.stdout.write(self.style.ERROR(f"❌ Failed to fetch Kanji data: {e}"))
             return
 
-        media_root = getattr(settings, 'MEDIA_ROOT', 'media')
-        audio_dir = os.path.join(media_root, "kanji_audio")
-        os.makedirs(audio_dir, exist_ok=True)
-
         added = 0
+        skipped = 0
+
         for character, details in kanji_data.items():
-            # Extract relevant details
             onyomi = ', '.join(details.get("readings_on", []))
             kunyomi = ', '.join(details.get("readings_kun", []))
             meaning = ', '.join(details.get("meanings", []))
@@ -31,29 +49,24 @@ class Command(BaseCommand):
             grade = details.get("grade")
             stroke_count = details.get("strokes")
 
-            # Simulate audio file path
-            audio_filename = f"{character}.mp3"
-            audio_path = os.path.join("kanji_audio", audio_filename)
+            obj, created = Kanji.objects.get_or_create(
+                character=character,
+                defaults={
+                    "onyomi": onyomi,
+                    "kunyomi": kunyomi,
+                    "meaning": meaning,
+                    "jlpt_level": jlpt_level,
+                    "grade": grade,
+                    "stroke_count": stroke_count,
+                }
+            )
 
-            try:
-                obj, created = Kanji.objects.get_or_create(
-                    character=character,
-                    defaults={
-                        "onyomi": onyomi,
-                        "kunyomi": kunyomi,
-                        "meaning": meaning,
-                        "jlpt_level": jlpt_level,
-                        "grade": grade,
-                        "stroke_count": stroke_count,
-                        "audio": audio_path
-                    }
-                )
+            if created or not obj.audio:
+                self.generate_audio_for_kanji(obj)
+                self.stdout.write(f"✓ Added + Audio: {character}")
+                added += 1
+            else:
+                self.stdout.write(f"⏭ Skipped (exists): {character}")
+                skipped += 1
 
-                if created:
-                    added += 1
-                self.stdout.write(self.style.SUCCESS(f"✅ Successfully ->{added} added for {obj} Kanji.   "))
-
-            except Exception as e:
-                self.stdout.write(self.style.WARNING(f"⚠️ Could not add {character}: {e}"))
-
-        self.stdout.write(self.style.SUCCESS(f"✅ Successfully added {added} Kanji to kanji_master table."))
+        self.stdout.write(self.style.SUCCESS(f"✅ Finished: {added} added, {skipped} skipped."))

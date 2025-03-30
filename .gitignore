@@ -175,3 +175,4 @@ cython_debug/
 
 # temp file 
 temp_file.py
+script_audio/

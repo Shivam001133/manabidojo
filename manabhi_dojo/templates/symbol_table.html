@@ -6,25 +6,20 @@
 {% block style %}
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <style>
-  .flip-card {
-    transition: all 0.3s ease;
-    will-change: transform, background-color, box-shadow;
+  .char-cell {
+    cursor: pointer;
   }
 
-  .hover-effect:hover {
-    background-color: #fde68a; /* soft yellow */
+  .char-cell:hover {
+    background-color: #fde68a;
     box-shadow: 0 4px 20px rgba(253, 224, 71, 0.5);
     transform: scale(1.07);
     z-index: 10;
   }
-
-  .hover-effect {
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  }
 </style>
 {% endblock %}
 
-{% block body %}
+{% block content %}
 <div class="p-6 md:p-10 bg-white min-h-screen">
   <div class="text-center mb-10">
     <h1 class="text-4xl font-extrabold text-yellow-600 mb-2">Katakana Chart</h1>
@@ -32,8 +27,7 @@
   </div>
 
   <div class="overflow-x-auto max-w-7xl mx-auto">
-    <div class="grid grid-cols-6 sm:grid-cols-11 gap-3 sm:gap-4" id="katakana-grid">
-      <!-- Top header row -->
+    <div class="grid grid-cols-11 gap-3 sm:gap-4" id="katakana-grid">
       <div></div>
       {% for col in consonants %}
         <div class="text-center text-base sm:text-lg font-semibold text-gray-700 uppercase">{{ col }}</div>
@@ -42,21 +36,40 @@
       {% for row in katakana_rows %}
         <div class="text-center text-base sm:text-lg font-semibold text-gray-700 uppercase">{{ row.vowel }}</div>
         {% for char in row.characters %}
-        <!-- Group parent for hover sync -->
-        <div class="group bg-white rounded-xl shadow-lg p-4 flex flex-col items-center justify-center transition-all transform hover:scale-105 hover:shadow-2xl hover:bg-yellow-100">
-          {% if char.symbol %}
-            <!-- Inner symbol box with group-hover sync -->
-            <div class="w-16 h-16 flex items-center justify-center bg-white rounded-xl shadow-md transition-colors duration-200 group-hover:bg-yellow-200">
-              <div class="text-purple-600 text-3xl sm:text-4xl font-bold">{{ char.symbol }}</div>
-            </div>
-            <div class="mt-2 text-purple-500 text-sm sm:text-base font-semibold tracking-wide">{{ char.romaji }}</div>
-          {% else %}
-            <div class="h-10 sm:h-12"></div>
-          {% endif %}
-        </div>        
+          <div class="group bg-white rounded-xl shadow-lg p-4 flex flex-col items-center justify-center transition-all transform char-cell"
+               {% if char.audio %} onclick="playAudio('{{ char.id }}')" {% endif %}>
+            {% if char.symbol %}
+              <div class="w-16 h-16 flex items-center justify-center bg-white rounded-xl shadow-md">
+                <div class="text-purple-600 text-3xl sm:text-4xl font-bold">{{ char.symbol }}</div>
+              </div>
+              <div class="mt-2 text-purple-500 text-sm sm:text-base font-semibold tracking-wide">{{ char.romaji }}</div> 
+              {% if char.audio %}
+              <audio id="audio-{{ char.id }}">
+                <source src="{{ char.audio }}" type="audio/mpeg">
+              </audio>
+              {% endif %}
+            {% else %}
+              <div class="w-16 h-16 rounded-xl opacity-0">empty</div>
+            {% endif %}
+          </div>
         {% endfor %}
       {% endfor %}
     </div>
   </div>
 </div>
+
+<script>
+function playAudio(charId) {
+  const audio = document.getElementById(`audio-${charId}`);
+  if (audio) {
+    audio.play().then(() => {
+      console.log(`🔊 Playing audio for: ${charId}`);
+    }).catch((err) => {
+      console.error(`❌ Error playing audio for ${charId}:`, err);
+    });
+  } else {
+    console.warn(`⚠️ Audio element not found for: ${charId}`);
+  }
+}
+</script>
 {% endblock %}

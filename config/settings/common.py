@@ -38,7 +38,8 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+]
 LOCAL_APPS = [
     "manabhi_dojo.users",
     "manabhi_dojo.languages"
@@ -133,11 +134,13 @@ AUTH_USER_MODEL = "users.User"
 ## Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "manabhi_dojo" / "static",
 ]
 
+
+
+## login config
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'

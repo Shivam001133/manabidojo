@@ -1,6 +1,6 @@
 import dj_database_url
 from pathlib import Path
-from os import environ
+from decouple import config
 
 
 def sqlite(BASE_DIR: Path):
@@ -17,4 +17,6 @@ def sqlite(BASE_DIR: Path):
 
 
 def postgres()-> dj_database_url:
-    return dj_database_url.config(default=environ.get('DATABASE_URL'))
+    return dj_database_url.config(
+        default=config('DATABASE_URL',cast=str, default=False)
+    )

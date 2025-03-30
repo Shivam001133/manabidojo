@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path, include
 from manabhi_dojo.users import urls as users_urls
 from manabhi_dojo.languages import urls as languages_urls
+from django.conf.urls.static import static
+from django.conf import settings
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
@@ -25,4 +28,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('languages/', include(languages_urls)),
     path('', include('django.contrib.auth.urls')),
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
+
+if settings.DEBUG:
+    # Static file serving when using Gunicorn + Uvicorn for local web socket development
+    urlpatterns += staticfiles_urlpatterns()

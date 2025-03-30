@@ -13,7 +13,20 @@ def KatakanaView(request):
         for c in consonants:
             romaji = v if c == '-' else c + v
             char = characters.filter(romaji=romaji).first()
-            row['characters'].append({'symbol': char.symbol if char else '', 'romaji': char.romaji if char else ''})
+            if char:
+                row['characters'].append({
+                    'id': char.id,
+                    'symbol': char.symbol,
+                    'romaji': char.romaji,
+                    'audio': char.audio.url if char.audio else None,
+                })
+            else:
+                row['characters'].append({
+                    'id': None,
+                    'symbol': '',
+                    'romaji': '',
+                    'audio': None,
+                })
         katakana_rows.append(row)
 
     return render(request, 'symbol_table.html', {

@@ -1,9 +1,22 @@
 from django.core.management.base import BaseCommand
 from manabhi_dojo.languages.models import LanguageScript, Character
+from gtts import gTTS
+from django.core.files.base import ContentFile
+import io
 
 
 class Command(BaseCommand):
     help = "Seed the Katakana script with 46 basic characters"
+    def generate_audio_for_character(self, character):
+        tts = gTTS(text=character.symbol, lang="ja")
+        buffer = io.BytesIO()
+        tts.write_to_fp(buffer)
+        buffer.seek(0)
+
+        filename = f"{character.romaji}.mp3"
+        character.audio.save(filename, ContentFile(buffer.read()))
+        character.save()
+        self.stdout.write(f"🎵 Audio uploaded: {character.audio.name}")
 
     def handle(self, *args, **kwargs):
         script, _ = LanguageScript.objects.get_or_create(
@@ -78,10 +91,14 @@ class Command(BaseCommand):
                 symbol=char["symbol"],
                 defaults={
                     "romaji": char["romaji"],
-                    "example_word": char["example_word"]
+                    "example_word": char["example_word"],
+                    "meaning": None
                 }
             )
-            status = "✓ Added" if created else "⏭ Skipped"
-            self.stdout.write(f"{status}: {char['symbol']} ({char['romaji']})")
+            if created or not obj.audio:
+                self.generate_audio_for_character(obj)
+                self.stdout.write(f"✓ Added + Audio: {char['symbol']} ({char['romaji']})")
+            else:
+                self.stdout.write(f"⏭ Skipped (already exists): {char['symbol']} ({char['romaji']})")
 
-        self.stdout.write(self.style.SUCCESS("✅ All Katakana characters seeded successfully."))
+        self.stdout.write(self.style.SUCCESS("✅ Hiragana characters seeded and audio generated!"))

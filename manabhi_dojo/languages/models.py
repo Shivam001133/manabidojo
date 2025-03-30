@@ -1,4 +1,11 @@
 from django.db import models
+from django.core.files.base import ContentFile
+from gtts import gTTS
+import io
+
+def character_audio_upload_path(instance, filename):
+    script_name = instance.script.name.lower()
+    return f"script_audio/{script_name}/{filename}"
 
 
 class LanguageScript(models.Model):
@@ -11,14 +18,13 @@ class LanguageScript(models.Model):
 
 
 class Character(models.Model):
-    script = models.ForeignKey(LanguageScript, on_delete=models.CASCADE, related_name='characters')
+    script = models.ForeignKey("LanguageScript", on_delete=models.CASCADE, related_name='characters')
     symbol = models.CharField(max_length=5)
     romaji = models.CharField(max_length=20, blank=True, null=True)
     meaning = models.CharField(max_length=100, blank=True, null=True)
     example_word = models.CharField(max_length=100, blank=True, null=True)
-    audio = models.FileField(upload_to='character_audio/', blank=True, null=True)
+    audio = models.FileField(upload_to=character_audio_upload_path, blank=True, null=True)
     order = models.PositiveIntegerField(default=0)
-
 
     def __str__(self):
         return self.symbol
