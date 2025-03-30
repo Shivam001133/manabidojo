@@ -1,156 +1,81 @@
 {% load static %}
-{% block navbar %}
-<nav class="navbar navbar-expand-lg main-navbar sticky">
-    <div class="form-inline mr-auto">
-      <ul class="navbar-nav mr-3">
-        <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg
-                                collapse-btn"> <i data-feather="align-justify"></i></a></li>
-        <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
-            <i data-feather="maximize"></i>
-          </a></li>
-        <li>
-          <form class="form-inline mr-auto">
-            <div class="search-element">
-              <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="200">
-              <button class="btn" type="submit">
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
-          </form>
-        </li>
-      </ul>
+<!-- Navbar -->
+<nav class="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-sm dark:shadow dark:shadow-gray-800 bg-[url('/static/img/japanese-pattern-light.png')] dark:bg-[url('/static/img/japanese-pattern-dark.png')] bg-cover">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+      <!-- Logo / App Name -->
+      <div class="flex-shrink-0 text-xl font-bold text-gray-800 dark:text-white">
+        <a href="{% url 'users:home' %}">Mnanabhi Dojo</a>
+      </div>
+
+      <!-- Desktop Nav Links -->
+      <div class="hidden md:flex space-x-6 text-gray-700 dark:text-gray-200">
+        <a href="" class="hover:text-indigo-500 dark:hover:text-indigo-400">Dashboard</a>
+        <a href="" class="hover:text-indigo-500 dark:hover:text-indigo-400">Hiragana</a>       
+        <a href="{% url 'languages:katakana' %}" class="hover:text-indigo-500 dark:hover:text-indigo-400">Katakana</a>
+        <a href="" class="hover:text-indigo-500 dark:hover:text-indigo-400">Kanji</a>
+        <a href="" class="hover:text-indigo-500 dark:hover:text-indigo-400">Profile</a>
+      </div>
+
+      <!-- Right side buttons -->
+      <div class="flex items-center space-x-4">
+        <!-- Theme Toggle -->
+        <button onclick="toggleTheme()" class="text-2xl">
+          <span id="theme-icon">🌞</span>
+        </button>
+
+        <!-- Mobile Menu Button -->
+        <button class="md:hidden text-gray-800 dark:text-gray-200" onclick="toggleMobileMenu()">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
     </div>
-    <ul class="navbar-nav navbar-right">
-      <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
-          class="nav-link nav-link-lg message-toggle"><i data-feather="mail"></i>
-          <span class="badge headerBadge1">
-            6 </span> </a>
-        <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
-          <div class="dropdown-header">
-            Messages
-            <div class="float-right">
-              <a href="#">Mark All As Read</a>
-            </div>
-          </div>
-          <div class="dropdown-list-content dropdown-list-message">
-            <a href="#" class="dropdown-item">
-                <span class="dropdown-item-avatar text-white">
-                    <img alt="image" src='{% static "img/users/user-1.png" %}' class="rounded-circle">
-                </span>
-                <span class="dropdown-item-desc"> <span class="message-user">John Deo</span>
-                <span class="time messege-text">Please check your mail !!</span>
-                <span class="time">2 Min Ago</span>
-              </span>
-            </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                <img alt="image" src='{% static "img/users/user-2.png" %}' class="rounded-circle">
-              </span> <span class="dropdown-item-desc"> <span class="message-user">Sarah
-                  Smith</span> <span class="time messege-text">Request for leave
-                  application</span>
-                <span class="time">5 Min Ago</span>
-              </span>
-            </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                <img alt="image" src='{% static "img/users/user-5.png" %}' class="rounded-circle">
-              </span> <span class="dropdown-item-desc"> <span class="message-user">Jacob
-                  Ryan</span> <span class="time messege-text">Your payment invoice is
-                  generated.</span> <span class="time">12 Min Ago</span>
-              </span>
-            </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                <img alt="image" src='{% static "img/users/user-4.png" %}' class="rounded-circle">
-              </span> <span class="dropdown-item-desc"> <span class="message-user">Lina
-                  Smith</span> <span class="time messege-text">hii John, I have upload
-                  doc
-                  related to task.</span> <span class="time">30
-                  Min Ago</span>
-              </span>
-            </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                <img alt="image" src='{% static "img/users/user-3.png" %}' class="rounded-circle">
-              </span> <span class="dropdown-item-desc"> <span class="message-user">Jalpa
-                  Joshi</span> <span class="time messege-text">Please do as specify.
-                  Let me
-                  know if you have any query.</span> <span class="time">1
-                  Days Ago</span>
-              </span>
-            </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                <img alt="image" src='{% static "img/users/user-2.png" %}' class="rounded-circle">
-              </span> <span class="dropdown-item-desc"> <span class="message-user">Sarah
-                  Smith</span> <span class="time messege-text">Client Requirements</span>
-                <span class="time">2 Days Ago</span>
-              </span>
-            </a>
-          </div>
-          <div class="dropdown-footer text-center">
-            <a href="#">View All <i class="fas fa-chevron-right"></i></a>
-          </div>
-        </div>
-      </li>
-      <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
-          class="nav-link notification-toggle nav-link-lg"><i data-feather="bell" class="bell"></i>
-        </a>
-        <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
-          <div class="dropdown-header">
-            Notifications
-            <div class="float-right">
-              <a href="#">Mark All As Read</a>
-            </div>
-          </div>
-          <div class="dropdown-list-content dropdown-list-icons">
-            <a href="#" class="dropdown-item dropdown-item-unread"> <span
-                class="dropdown-item-icon bg-primary text-white"> <i class="fas
-                                            fa-code"></i>
-              </span> <span class="dropdown-item-desc"> Template update is
-                available now! <span class="time">2 Min
-                  Ago</span>
-              </span>
-            </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-icon bg-info text-white"> <i class="far
-                                            fa-user"></i>
-              </span> <span class="dropdown-item-desc"> <b>You</b> and <b>Dedik
-                  Sugiharto</b> are now friends <span class="time">10 Hours
-                  Ago</span>
-              </span>
-            </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-icon bg-success text-white"> <i
-                  class="fas
-                                            fa-check"></i>
-              </span> <span class="dropdown-item-desc"> <b>Kusnaedi</b> has
-                moved task <b>Fix bug header</b> to <b>Done</b> <span class="time">12
-                  Hours
-                  Ago</span>
-              </span>
-            </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-icon bg-danger text-white"> <i
-                  class="fas fa-exclamation-triangle"></i>
-              </span> <span class="dropdown-item-desc"> Low disk space. Let's
-                clean it! <span class="time">17 Hours Ago</span>
-              </span>
-            </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-icon bg-info text-white"> <i class="fas
-                                            fa-bell"></i>
-              </span> <span class="dropdown-item-desc"> Welcome to Otika
-                template! <span class="time">Yesterday</span>
-              </span>
-            </a>
-          </div>
-          <div class="dropdown-footer text-center">
-            <a href="#">View All <i class="fas fa-chevron-right"></i></a>
-          </div>
-        </div>
-      </li>
-      <li class="dropdown"><a href="#" data-toggle="dropdown"
-          class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src='{% static "img/user.png" %}'
-            class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
-        <div class="dropdown-menu dropdown-menu-right pullDown">
-          <div class="dropdown-title">Hello {{user.username}}</div>
-          <a href="#" class="dropdown-item has-icon"> <i class="far
-                                    fa-user"></i> Profile
-          </a><a href="#" class="dropdown-item has-icon"> <i class="fas fa-cog"></i>
-            Settings
-          </a>
-          <div class="dropdown-divider"></div>
-          <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-            {% csrf_token %}
-          </form>
-          <a href="#" onclick="document.getElementById('logout-form').submit();" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
-            Logout
-          </a>
-        </div>
-      </li>
-    </ul>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2 text-gray-700 dark:text-gray-200">
+    <a href="" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Dashboard</a>
+    <a href="" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Hiragana</a>
+    <a href="{% url 'languages:katakana' %}" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Katakana</a>
+    <a href="" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Kanji</a>
+    <a href="" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Profile</a>
+  </div>
 </nav>
-{% endblock navbar %}
+
+<!-- JavaScript for Theme Toggle -->
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    const icon = document.getElementById("theme-icon");
+    html.classList.toggle('dark');
+    if (html.classList.contains('dark')) {
+      icon.textContent = '🌜';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      icon.textContent = '🌞';
+      localStorage.setItem('theme', 'light');
+    }
+  }
+
+  function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('hidden');
+  }
+
+  // Load saved theme
+  window.onload = () => {
+    const theme = localStorage.getItem('theme');
+    const html = document.documentElement;
+    const icon = document.getElementById("theme-icon");
+    if (theme === 'dark') {
+      html.classList.add('dark');
+      icon.textContent = '🌜';
+    } else {
+      html.classList.remove('dark');
+      icon.textContent = '🌞';
+    }
+  }
+</script>

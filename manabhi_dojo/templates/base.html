@@ -1,37 +1,48 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>IndiaIVF - {% block title %}{% endblock %}</title>
-  <!-- General CSS Files -->
-  {% block style %}{% endblock %}
-  <link rel="stylesheet" href='{% static "css/app.min.css" %}'>
-  <link rel="stylesheet" href='{% static "bundles/bootstrap-social/bootstrap-social.css" %}'>
-  <!-- Template CSS -->
-  <link rel="stylesheet" href='{% static "css/style.css" %}'>
-  <link rel="stylesheet" href='{% static "css/components.css" %}'>
-  <!-- Custom style CSS -->
-  <link rel="stylesheet" href='{% static "css/custom.css" %}'>
-  <link rel='shortcut icon' type='image/x-icon' href='{% static "img/favicon.png" %}' />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Nihongo App{% endblock %}</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+
+  <!-- TailwindCSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          backgroundImage: {
+            'japanese-pattern-light': "url('/static/img/japanese-pattern-light.png')",
+            'japanese-pattern-dark': "url('/static/img/japanese-pattern-dark.png')",
+          },
+        },
+      },
+    }
+  </script>
+
+  <!-- Extra head content -->
+  {% block head %}{% endblock %}
 </head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
 
-<body>
-  {% block body %}{% endblock %}
-  <!-- General JS Scripts -->
-  {% block script %}{% endblock %}
-  <script src='{% static "js/app.min.js" %}'></script>
-  <!-- JS Libraies -->
-  <script src='{% static "bundles/apexcharts/apexcharts.min.js" %}'></script>
-  <!-- Page Specific JS File -->
-  <script src='{% static "js/page/index.js" %}'></script>
-  <!-- Template JS File -->
-  <script src='{% static "js/scripts.js" %}'></script>
-  <!-- Custom JS File -->
-  <script src='{% static "js/custom.js" %}'></script>
+  <!-- Navbar -->
+  {% include 'navbar.html' %}
+
+  <!-- Main page content -->
+  <main class="flex-grow">
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- Footer -->
+  {% include 'footer.html' %}
+
+  <!-- Extra page scripts -->
+  {% block scripts %}{% endblock %}
 </body>
-
-
 </html>
