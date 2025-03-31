@@ -7,3 +7,4 @@ dj_database_url
 gtts
 django-storages
 python-decouple
+gunicorn
