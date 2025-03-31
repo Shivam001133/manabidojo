@@ -8,3 +8,4 @@ gtts
 django-storages
 python-decouple
 gunicorn
+boto3
