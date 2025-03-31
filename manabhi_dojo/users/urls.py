@@ -6,7 +6,9 @@ from manabhi_dojo.users.views import (
     user_detail_view,
     user_redirect_view,
     user_update_view,
-    signup,
+    sign_up,
+    dashboard,
+    profile_view,
 )
 
 app_name = "users"
@@ -15,9 +17,9 @@ app_name = "users"
 urlpatterns = [
     path("", home_view, name="home"),
     path("~redirect/", view=user_redirect_view, name="redirect"),
-    path("~update/", view=user_update_view, name="update"),
-    path("<int:pk>/", view=user_detail_view, name="detail"),
-    path("signup/", view=signup, name="signup"),
+    path("profile/", profile_view, name="profile"),
+    path('dashboard/', dashboard, name='dashboard'),
+    path('signup/', sign_up, name='signup'),
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
 ]

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Nihongo App{% endblock %}
+
+{% block content %}
+<div class="p-6">
+  <!-- Greeting & Avatar Section -->
+  <div class="flex items-center space-x-4 mb-6">
+    <img src="{% static 'img/mascot-waving.png' %}" alt="Mascot" class="h-12 w-12">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">こんにちは, {{ user.username }}!</h1>
+  </div>
+
+  <!-- Progress Overview -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+    <!-- Beginner (N5) Card -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Beginner (N5)</h2>
+      <div class="relative mt-4">
+        <!-- Progress Ring or Bar -->
+        <div class="w-full h-2 bg-gray-300 rounded-full">
+          <div class="h-2 bg-blue-600 rounded-full" style="width: 60%;"></div> <!-- Example Progress -->
+        </div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-lg">60%</div>
+      </div>
+      <p class="mt-2 text-gray-600 dark:text-gray-300">You’ve completed 60% of the beginner course! Keep up the great work.</p>
+      <a href="" class="mt-4 block text-blue-500 hover:underline">Go to Lessons</a>
+    </div>
+
+    <!-- Intermediate (N4) Card - Locked/Coming Soon -->
+    <div class="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Intermediate (N4)</h2>
+      <p class="mt-2 text-gray-600 dark:text-gray-300">Coming Soon...</p>
+      <p class="mt-4 text-sm text-gray-400">This level is locked until you complete Beginner (N5). Stay tuned for more!</p>
+    </div>
+
+    <!-- Advanced (N3-N1) Card - Locked/Coming Soon -->
+    <div class="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">Advanced (N3-N1)</h2>
+      <p class="mt-2 text-gray-600 dark:text-gray-300">Coming Soon...</p>
+      <p class="mt-4 text-sm text-gray-400">This level is locked until you complete Intermediate (N4). Keep progressing!</p>
+    </div>
+  </div>
+
+  <!-- Key Stats Section -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <!-- Total Lessons Completed -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Lessons Completed</h3>
+      <p class="text-3xl font-bold text-blue-600">45</p> <!-- Example Value -->
+    </div>
+
+    <!-- Current Streak -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Current Streak</h3>
+      <p class="text-3xl font-bold text-green-600">7 Days</p> <!-- Example Value -->
+    </div>
+
+    <!-- Points Earned -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Points Earned</h3>
+      <p class="text-3xl font-bold text-yellow-600">350</p> <!-- Example Value -->
+    </div>
+  </div>
+
+  <!-- Quick Links Section -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
+    <!-- Hiragana Link -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+      <a href="" class="text-2xl font-semibold text-blue-600 hover:underline">Hiragana</a>
+    </div>
+
+    <!-- Katakana Link -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+      <a href="" class="text-2xl font-semibold text-blue-600 hover:underline">Katakana</a>
+    </div>
+
+    <!-- Kanji Link -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+      <a href="in" class="text-2xl font-semibold text-blue-600 hover:underline">Kanji</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

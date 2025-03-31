@@ -127,14 +127,6 @@ USE_TZ = True
 
 AUTH_USER_MODEL = "users.User"
 
-## Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATICFILES_DIRS = [
-    BASE_DIR / "manabhi_dojo" / "static",
-]
-
-
 ## login config
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"

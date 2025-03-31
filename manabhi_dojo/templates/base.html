@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% block meta %}{% endblock %}
   <title>{% block title %}Nihongo App{% endblock %}</title>
 
   <!-- Favicon -->
@@ -17,13 +18,12 @@
       theme: {
         extend: {
           backgroundImage: {
-            'japanese-pattern-light': "url('/static/img/japanese-pattern-light.png')",
-            'japanese-pattern-dark': "url('/static/img/japanese-pattern-dark.png')",
           },
         },
       },
     }
   </script>
+  {% block script %}{% endblock %}
 
   <!-- Extra head content -->
   {% block head %}{% endblock %}

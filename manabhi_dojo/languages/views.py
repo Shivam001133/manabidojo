@@ -1,43 +1,47 @@
 from django.shortcuts import render
-from manabhi_dojo.languages.models import Character
+from django.conf import settings
+from manabhi_dojo.languages.models import Character, HiraganaProgress, Kanji
+from django.contrib.auth.decorators import login_required
+
+
+# @login_required
+def hiragana_view(request):
+    # Retrieve all Katakana rows and consonants from your database
+    consonants = Character.objects.all()
+
+    # Pass the data to the template
+    return render(request, 'pages/hiragana.html', {
+        'consonants': consonants,
+    })
 
 
 def katakana_view(request):
-    vowels = ["a", "i", "u", "e", "o"]
-    consonants = ["-", "k", "s", "t", "n", "h", "m", "y", "r", "w"]
-    characters = Character.objects.filter(script__name="katakana")
-    katakana_rows = []
+    # Retrieve all Katakana characters from your database
+    katakana_characters = Character.objects.filter(script__name="katakana")  # Adjust based on your model
 
-    for v in vowels:
-        row = {"vowel": v, "characters": []}
-        for c in consonants:
-            romaji = v if c == "-" else c + v
-            char = characters.filter(romaji=romaji).first()
-            if char:
-                row["characters"].append(
-                    {
-                        "id": char.id,
-                        "symbol": char.symbol,
-                        "romaji": char.romaji,
-                        "audio": char.audio.url if char.audio else None,
-                    }
-                )
-            else:
-                row["characters"].append(
-                    {
-                        "id": None,
-                        "symbol": "",
-                        "romaji": "",
-                        "audio": None,
-                    }
-                )
-        katakana_rows.append(row)
+    # Pass the data to the template
+    return render(request, 'pages/katakana.html', {
+        'katakana_characters': katakana_characters,
+    })
 
-    return render(
-        request,
-        "symbol_table.html",
-        {
-            "consonants": consonants,
-            "katakana_rows": katakana_rows,
-        },
-    )
+
+def kanji_view(request):
+    # Retrieve all Kanji characters from your database
+    kanji_characters = Kanji.objects.all()  # Adjust based on your model
+
+    # Pass the data to the template
+    return render(request, 'pages/kanji.html', {
+        'kanji_characters': kanji_characters,
+    })
+
+
+def lesson_view(request):
+    # Retrieve characters and quiz questions for the lesson
+    characters = Character.objects.all()
+
+    # Pass the data to the template
+    return render(request, 'pages/quiz.html', {
+        'lesson': [],
+        'characters': characters,
+        'quiz_questions': [],
+    })

@@ -1,43 +1,54 @@
-from django.contrib.auth import forms as admin_forms
-from django.forms import EmailField
-from django.utils.translation import gettext_lazy as _
+# forms.py
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-
-from .models import User
+from django.contrib.auth.models import User
 
 
-class UserAdminChangeForm(admin_forms.UserChangeForm):
-    class Meta(admin_forms.UserChangeForm.Meta):  # type: ignore[name-defined]
-        model = User
-        field_classes = {"email": EmailField}
-
-
-class UserAdminCreationForm(admin_forms.UserCreationForm):
-    """
-    Form for User Creation in the Admin Area.
-    To change user signup, see UserSignupForm and UserSocialSignupForm.
-    """
-
-    class Meta(admin_forms.UserCreationForm.Meta):  # type: ignore[name-defined]
-        model = User
-        fields = ("email",)
-        field_classes = {"email": EmailField}
-        error_messages = {
-            "email": {"unique": _("This email has already been taken.")},
-        }
-
-
-class SignUpForm(UserCreationForm):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"class": "form-control"}))
-    username = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}))
-    password1 = forms.CharField(
-        widget=forms.PasswordInput(attrs={"class": "form-control"})
-    )
-    password2 = forms.CharField(
-        widget=forms.PasswordInput(attrs={"class": "form-control"})
-    )
+class UserAdminCreationForm(forms.ModelForm):
+    password1 = forms.CharField(widget=forms.PasswordInput, label="Password")
+    password2 = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
 
     class Meta:
         model = User
-        fields = ["username", "email", "password1", "password2"]
+        fields = ('username', 'email')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
+        if password1 != password2:
+            raise forms.ValidationError("Passwords do not match")
+        return cleaned_data
+
+
+class UserAdminChangeForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput, label="Password", required=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        if password and len(password) < 8:
+            raise forms.ValidationError("Password must be at least 8 characters long.")
+        return cleaned_data
+
+
+class UserSignUpForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput, label="Password")
+    password_confirmation = forms.CharField(widget=forms.PasswordInput, label="Confirm Password")
+    avatar = forms.ImageField(required=False, label="Choose Avatar")
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        password_confirmation = cleaned_data.get("password_confirmation")
+
+        if password != password_confirmation:
+            raise forms.ValidationError("Passwords do not match")
+        return cleaned_data

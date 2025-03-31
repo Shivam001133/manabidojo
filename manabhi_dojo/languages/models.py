@@ -1,4 +1,5 @@
 from django.db import models
+from manabhi_dojo.users.models import User
 
 
 def character_audio_upload_path(instance, filename):
@@ -47,3 +48,12 @@ class Kanji(models.Model):
     def __str__(self):
         return self.character
 
+
+class HiraganaProgress(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    completed_characters = models.JSONField(default=list)  # List of completed character IDs
+    streak = models.IntegerField(default=0)  # Current learning streak
+    points = models.IntegerField(default=0)  # Points earned by the user
+
+    def __str__(self):
+        return f"{self.user.username}'s Hiragana Progress"

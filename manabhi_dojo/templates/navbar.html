@@ -1,20 +1,20 @@
 {% load static %}
 <!-- Navbar -->
-<nav class="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-sm dark:shadow dark:shadow-gray-800 bg-[url('/static/img/japanese-pattern-light.png')] dark:bg-[url('/static/img/japanese-pattern-dark.png')] bg-cover">
+<nav class="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-sm dark:shadow dark:shadow-gray-800">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16 items-center">
       <!-- Logo / App Name -->
       <div class="flex-shrink-0 text-xl font-bold text-gray-800 dark:text-white">
-        <a href="{% url 'users:home' %}">Mnanabhi Dojo</a>
+        <a href="{% url 'users:home' %}">Manabhi Dojo</a>
       </div>
 
       <!-- Desktop Nav Links -->
       <div class="hidden md:flex space-x-6 text-gray-700 dark:text-gray-200">
-        <a href="" class="hover:text-indigo-500 dark:hover:text-indigo-400">Dashboard</a>
-        <a href="" class="hover:text-indigo-500 dark:hover:text-indigo-400">Hiragana</a>       
+        <a href="{% url 'users:dashboard' %}" class="hover:text-indigo-500 dark:hover:text-indigo-400">Dashboard</a>
+        <a href="{% url 'languages:hiragana' %}" class="hover:text-indigo-500 dark:hover:text-indigo-400">Hiragana</a>       
         <a href="{% url 'languages:katakana' %}" class="hover:text-indigo-500 dark:hover:text-indigo-400">Katakana</a>
-        <a href="" class="hover:text-indigo-500 dark:hover:text-indigo-400">Kanji</a>
-        <a href="" class="hover:text-indigo-500 dark:hover:text-indigo-400">Profile</a>
+        <a href="{% url 'languages:kanji' %}" class="hover:text-indigo-500 dark:hover:text-indigo-400">Kanji</a>
+        <a href="{% url 'users:profile' %}" class="hover:text-indigo-500 dark:hover:text-indigo-400">Profile</a>
       </div>
 
       <!-- Right side buttons -->

@@ -1,50 +1,41 @@
-{% extends "base.html" %}
-{% block body %}
-<div class="loader"></div>
-<div id="app">
-  <section class="section">
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h4>Login</h4>
-            </div>
-            <div class="card-body">
-              <form method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                  <label for="username">Username</label>
-                  <input id="username" type="text" class="form-control" name="username" tabindex="1" required autofocus>
-                  <div class="invalid-feedback">
-                    Please fill in your username
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="d-block">
-                    <label for="password" class="control-label">Password</label>
-                    <div class="float-right">
-                      <a href="auth-forgot-password.html" class="text-small">
-                        Forgot Password?
-                      </a>
-                    </div>
-                  </div>
-                  <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
-                  <div class="invalid-feedback">
-                    please fill in your password
-                  </div>
-                </div>
-                <div class="form-group">
-                  <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
-                    Login
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - Nihongo App{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen bg-cover bg-center">
+  <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full sm:w-96">
+    <div class="flex justify-center mb-6">
+      <img src="{% static 'img/logo.png' %}" alt="App Logo" class="h-12">
     </div>
-  </section>
+
+    <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-gray-100 mb-6">Welcome Back!</h2>
+
+    <form action="{% url 'login' %}" method="POST">
+      {% csrf_token %}
+      <div class="mb-4">
+        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email or Username</label>
+        <input type="text" id="email" name="email" class="mt-1 block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100" required>
+      </div>
+
+      <div class="mb-6">
+        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+        <input type="password" id="password" name="password" class="mt-1 block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100" required>
+      </div>
+
+      <div class="flex justify-between items-center mb-6">
+        <a href="" class="text-sm text-blue-500 hover:underline">Forgot Password?</a>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-blue-700 dark:hover:bg-blue-600">
+        Log In
+      </button>
+    </form>
+
+    <div class="mt-6 text-center">
+      <p class="text-sm text-gray-600 dark:text-gray-400">Don't have an account? <a href="{% url 'users:signup' %}" class="text-blue-500 hover:underline">Sign Up</a></p>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -8,9 +8,11 @@ from django.views.generic import DetailView
 from django.views.generic import RedirectView
 from django.views.generic import UpdateView
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
-from manabhi_dojo.users.forms import SignUpForm
-from manabhi_dojo.users.models import User
+from manabhi_dojo.users.forms import UserSignUpForm
+from manabhi_dojo.users.models import User, Profile
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -53,14 +55,57 @@ def home_view(request):
     return render(request, "index.html")
 
 
-def signup(request):
+def sign_up(request):
     if request.method == "POST":
-        form = SignUpForm(request.POST)
+        form = UserSignUpForm(request.POST, request.FILES)
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            # Optional: Save avatar if provided
+            avatar = form.cleaned_data.get('avatar')
+            if avatar:
+                user_profile = user.profile  # Assuming you have a related UserProfile model
+                user_profile.avatar = avatar
+                user_profile.save()
             login(request, user)
-            return redirect("/home")
+            return redirect('home')  # Redirect to a home page or dashboard
     else:
-        form = SignUpForm()
+        form = UserSignUpForm()
+    
+    return render(request, 'registration/signup.html', {'form': form})
 
-    return render(request, "registration/signup.html", {"form": form})
+
+def get_user_progress(user):
+    # Replace this with actual data fetching logic (e.g., from the database)
+    return {
+        'completed_lessons': 45,
+        'current_streak': 7,
+        'points_earned': 350,
+        'n5_progress': 60,  # 60% progress on N5 course
+    }
+
+
+# @login_required
+def dashboard(request):
+    # Ensure the user is logged in before showing the dashboard
+    if not request.user.is_authenticated:
+        raise Http404("Page not found")
+
+    user_progress = get_user_progress(request.user)  # Fetch the user's progress data
+
+    return render(request, 'pages/dashboard.html', {
+        'user_progress': user_progress,
+        'user': request.user,  # Pass the user object to the template for personalization
+    })
+
+
+# @login_required
+def profile_view(request):
+    # Get the user's profile information
+    user_profile = Profile.objects.get(user=request.user)
+
+    # Pass the user profile and any other relevant data to the template
+    return render(request, 'user/profile.html', {
+        'user_profile': user_profile,
+    })

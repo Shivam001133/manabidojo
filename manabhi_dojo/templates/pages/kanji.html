@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}Kanji Lessons - Nihongo App{% endblock %}
+
+{% block style %}
+<style>
+  /* Kanji Lessons specific styling */
+  .kanji-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .kanji-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .kanji-symbol {
+    font-size: 4rem;
+    color: #4FD1C5;
+    text-align: center;
+  }
+
+  .kanji-meaning {
+    font-size: 1.2rem;
+    color: #4A5568;
+    text-align: center;
+  }
+
+  .kanji-details {
+    display: none;
+    margin-top: 15px;
+    text-align: left;
+  }
+
+  .kanji-card.open .kanji-details {
+    display: block;
+  }
+
+  .kanji-tab {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #EDF2F7;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .kanji-tab:hover {
+    background-color: #E2E8F0;
+  }
+
+  .kanji-stroke {
+    display: none;
+    margin-top: 20px;
+  }
+
+  .kanji-card.open .kanji-stroke {
+    display: block;
+  }
+
+  .kanji-progress {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+
+  .kanji-progress .progress-bar {
+    width: 70%;
+    background-color: #E2E8F0;
+    border-radius: 5px;
+    height: 10px;
+  }
+
+  .kanji-progress .progress-bar span {
+    display: block;
+    background-color: #4FD1C5;
+    height: 100%;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="p-6 md:p-10 bg-white min-h-screen">
+  <h1 class="text-4xl font-extrabold text-purple-600 mb-6">Kanji Lessons</h1>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for kanji in kanji_characters %}
+      <div class="kanji-card" id="kanji-card-{{ kanji.id }}">
+        <div class="kanji-symbol">{{ kanji.symbol }}</div>
+        <div class="kanji-meaning">{{ kanji.meaning }}</div>
+
+        <div class="kanji-details">
+          <!-- Accordion: Details like readings, example words -->
+          <div class="kanji-tab" onclick="toggleTab({{ kanji.id }})">Meaning & Reading</div>
+          <div class="kanji-tab" onclick="toggleTab({{ kanji.id }})">Stroke Order</div>
+          <div class="kanji-tab" onclick="toggleTab({{ kanji.id }})">Examples</div>
+
+          <div class="kanji-stroke">
+            <canvas id="canvas-{{ kanji.id }}" width="300" height="300" class="border-2 border-gray-300"></canvas>
+            <button onclick="startDrawing({{ kanji.id }})" class="mt-2 py-2 px-4 bg-blue-600 text-white rounded-full">Draw This Kanji</button>
+          </div>
+
+          <div class="kanji-progress">
+            <div class="progress-bar">
+              <span style="width: {{ kanji.progress_percentage }}%"></span>
+            </div>
+            <span>{{ kanji.progress_percentage }}% Learned</span>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  // Toggle the details tab for each kanji card
+  function toggleTab(kanjiId) {
+    const card = document.getElementById(`kanji-card-${kanjiId}`);
+    card.classList.toggle('open');
+  }
+
+  // Drawing functionality (simplified version)
+  function startDrawing(kanjiId) {
+    const canvas = document.getElementById(`canvas-${kanjiId}`);
+    const ctx = canvas.getContext('2d');
+    
+    // Example stroke - Add stroke logic or animation here
+    ctx.beginPath();
+    ctx.moveTo(10, 10);
+    ctx.lineTo(150, 150);
+    ctx.stroke();
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}Lesson Content - Nihongo App{% endblock %}
+
+{% block style %}
+<style>
+  /* Styling for lesson content */
+  .lesson-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4FD1C5;
+    margin-bottom: 20px;
+  }
+
+  .lesson-subtitle {
+    font-size: 1.5rem;
+    color: #4A5568;
+    margin-bottom: 30px;
+  }
+
+  .character-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .character-symbol {
+    font-size: 4rem;
+    color: #4FD1C5;
+  }
+
+  .romaji {
+    font-size: 1.2rem;
+    color: #4A5568;
+    margin-top: 10px;
+  }
+
+  .audio-button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #3182ce;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .audio-button:hover {
+    background-color: #2b6cb0;
+  }
+
+  /* Quiz styling */
+  .quiz-section {
+    margin-top: 50px;
+  }
+
+  .quiz-question {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .quiz-option {
+    padding: 10px;
+    background-color: #EDF2F7;
+    border-radius: 8px;
+    margin: 5px 0;
+    cursor: pointer;
+  }
+
+  .quiz-option:hover {
+    background-color: #E2E8F0;
+  }
+
+  .progress-bar {
+    width: 100%;
+    background-color: #E2E8F0;
+    border-radius: 5px;
+    height: 20px;
+    margin-top: 20px;
+  }
+
+  .progress-bar span {
+    display: block;
+    background-color: #4FD1C5;
+    height: 100%;
+    border-radius: 5px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="p-6 md:p-10 bg-white min-h-screen">
+  <!-- Lesson Title -->
+  <div class="lesson-title">{{ lesson.title }}</div>
+  <div class="lesson-subtitle">{{ lesson.subtitle }}</div>
+
+  <!-- Lesson Content: Characters and Mnemonics -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for character in characters %}
+      <div class="character-card">
+        <div class="character-symbol">{{ character.symbol }}</div>
+        <div class="romaji">{{ character.romaji }}</div>
+        <div class="mnemonic">{{ character.mnemonic }}</div>
+        
+        {% if character.audio %}
+          <audio id="audio-{{ character.id }}">
+            <source src="{{ character.audio.url }}" type="audio/mpeg">
+          </audio>
+          <button onclick="document.getElementById('audio-{{ character.id }}').play()" class="audio-button">Play Pronunciation</button>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Quiz Section -->
+  <div class="quiz-section">
+    <div class="quiz-question">
+      <h2>Quiz: Test Your Knowledge</h2>
+      <p>{{ quiz_questions.0.question }}</p>
+    </div>
+
+    <div class="quiz-options">
+      {% for question in quiz_questions %}
+        <div class="quiz-option" onclick="checkAnswer('{{ question.id }}')">
+          {{ question.option_1 }}
+        </div>
+        <div class="quiz-option" onclick="checkAnswer('{{ question.id }}')">
+          {{ question.option_2 }}
+        </div>
+        <div class="quiz-option" onclick="checkAnswer('{{ question.id }}')">
+          {{ question.option_3 }}
+        </div>
+        <div class="quiz-option" onclick="checkAnswer('{{ question.id }}')">
+          {{ question.option_4 }}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="progress-bar">
+      <span style="width: 50%"></span>  <!-- Dynamically update based on quiz progress -->
+    </div>
+  </div>
+</div>
+
+<script>
+  // Function to check answer
+  function checkAnswer(questionId) {
+    // Assume correct answer is determined from questionId
+    // Example: Compare user input with the correct answer
+    const correctAnswer = "Option 1"; // Retrieve this from the backend based on the question
+    const userAnswer = event.target.innerText; // Get the selected option text
+
+    if (userAnswer === correctAnswer) {
+      alert("Correct! すごい (Great)!");
+      // Play a correct answer sound or animation here
+    } else {
+      alert("Incorrect! Try again.");
+      // Highlight the correct answer, provide a hint, etc.
+    }
+  }
+</script>
+{% endblock %}
