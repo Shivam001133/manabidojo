@@ -1,0 +1,23 @@
+{% load static %}
+<div class="card-wrapper mx-auto" onclick="flipCard('{{ char.id }}'); playAudio('{{ char.id }}')">
+    <div class="card" id="card-{{ char.id }}">
+      
+      <!-- Front Side -->
+      <div class="card-inner card-front {{ size_class }} dark:bg-gray-700 dark:text-white">
+        <div class="text-5xl font-extrabold text-purple-600 dark:text-purple-300 text-center">{{ char.character }}</div>
+        <div class="mt-4 text-center text-gray-700 dark:text-gray-200">{{ char.meaning }}</div>
+      </div>
+  
+      <!-- Back Side -->
+      <div class="card-inner card-back text-white text-center">
+        <img src="{% static 'img/manga-character-cheering.png' %}" alt="Kanji illustration" class="w-full h-full object-contain rounded-lg">
+      </div>
+    </div>
+  
+    {% if char.audio %}
+      <audio id="audio-{{ char.id }}">
+        <source src="{{ char.audio.url }}" type="audio/mpeg">
+      </audio>
+    {% endif %}
+  </div>
+  

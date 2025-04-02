@@ -5,50 +5,138 @@
 
 {% block content %}
 <div class="relative bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-    <div class="container mx-auto px-4 py-16 md:py-32">
-        <!-- Hero Section -->
-        <div class="flex flex-col md:flex-row items-center justify-between">
-            <div class="text-center md:text-left md:w-1/2 space-y-4">
-                <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
-                    Learn Japanese from Zero with Fun, Interactive Lessons
-                </h1>
-                <p class="text-lg md:text-xl">
-                    Immerse yourself in the world of Japanese language and culture through engaging lessons, quizzes, and more.
-                </p>
-                <div class="mt-8">
-                    <a href="/signup" class="inline-block bg-pink-500 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-pink-600 transition duration-300">
-                        Sign Up
-                    </a>
-                    <a href="/login" class="inline-block ml-4 py-3 px-6 text-pink-500 border border-pink-500 rounded-lg text-lg font-semibold hover:bg-pink-100 transition duration-300">
-                        Log In
-                    </a>
-                </div>
-            </div>
-            <div class="mt-8 md:mt-0 md:w-1/2">
-                <img src="{% static 'img/home/hero-image.png' %}" alt="Japanese Illustration" class="w-full rounded-lg">
-            </div>
+  <div class="container mx-auto px-4 py-16 md:py-32">
+    <!-- Hero Section -->
+    <div class="flex flex-col md:flex-row items-center justify-between">
+      <div class="text-center md:text-left md:w-1/2 space-y-4">
+        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+          Learn Japanese from Zero with Fun, Interactive Lessons
+        </h1>
+        <p class="text-lg md:text-xl">
+          Immerse yourself in the world of Japanese language and culture through engaging lessons, quizzes, and more.
+        </p>
+        <div class="mt-8">
+          <button onclick="openSignupModal()" class="inline-block bg-pink-500 text-white py-3 px-6 rounded-xl text-lg font-semibold hover:bg-pink-600 transition duration-300 shadow-md">
+            Sign Up
+          </button>
+          <button onclick="openLoginModal()" class="inline-block ml-4 py-3 px-6 text-pink-500 border border-pink-500 rounded-xl text-lg font-semibold hover:bg-pink-100 transition duration-300 shadow-md">
+            Log In
+          </button>
         </div>
+      </div>
+      <div class="mt-8 md:mt-0 md:w-1/2">
+        <img src="{% static 'img/home/hero-image.png' %}" alt="Japanese Illustration" class="w-full rounded-xl shadow-lg">
+      </div>
     </div>
-    
-    <!-- Features Section -->
-    <div class="container mx-auto px-4 py-16 md:py-32 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg mt-16">
-        <div class="text-center space-y-8">
-            <h2 class="text-3xl font-bold text-pink-500">Why Learn Japanese With Us?</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-lg shadow-lg dark:bg-gray-700">
-                    <h3 class="text-xl font-semibold">Interactive Lessons</h3>
-                    <p class="text-gray-700 dark:text-gray-300 mt-4">Engage with interactive lessons and quizzes designed to make learning fun.</p>
-                </div>
-                <div class="bg-white p-8 rounded-lg shadow-lg dark:bg-gray-700">
-                    <h3 class="text-xl font-semibold">Learn at Your Own Pace</h3>
-                    <p class="text-gray-700 dark:text-gray-300 mt-4">Take lessons at your own speed and revisit material whenever you need.</p>
-                </div>
-                <div class="bg-white p-8 rounded-lg shadow-lg dark:bg-gray-700">
-                    <h3 class="text-xl font-semibold">Cultural Insights</h3>
-                    <p class="text-gray-700 dark:text-gray-300 mt-4">Learn Japanese through the lens of rich cultural context, including anime and traditional elements.</p>
-                </div>
-            </div>
+  </div>
+
+    <!-- Sign Up Modal -->
+  <div id="signup-modal" class="fixed inset-0 hidden bg-black bg-opacity-60 flex items-center justify-center z-50">
+    <div class="relative bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl w-full sm:w-96">
+      
+      <!-- Close Button -->
+      <button onclick="closeSignupModal()" class="absolute top-3 right-3 w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100 hover:bg-red-500 hover:text-white text-2xl font-bold flex items-center justify-center transition duration-300">
+        &times;
+      </button>
+
+      <!-- Logo -->
+      <div class="flex justify-center mb-6">
+        <img src="{% static 'img/logo.png' %}" alt="App Logo" class="h-12">
+      </div>
+
+      <!-- Heading -->
+      <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-gray-100 mb-6">Create an Account</h2>
+
+      <!-- Signup Form -->
+      <form id="signup-form" action="{% url 'users:home' %}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        {% for field in form %}
+          <div>
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+              <p class="text-sm text-red-500 mt-1">{{ field.errors.0 }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-blue-700 dark:hover:bg-blue-600">
+          Create Account
+        </button>
+      </form>
+
+      <!-- Switch to Login -->
+      <div class="mt-6 text-center">
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          Already have an account?
+          <a href="javascript:void(0);" onclick="closeSignupModal(); openLoginModal();" class="text-blue-500 hover:underline">
+            Log In
+          </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Login Modal (Copied from login.html) -->
+  <div id="login-modal" class="fixed inset-0 hidden bg-black bg-opacity-60 z-50 flex items-center justify-center">
+    <div class="relative bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl w-full sm:w-96">
+      <button onclick="closeLoginModal()" class="absolute top-3 right-3 w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100 hover:bg-red-500 hover:text-white text-2xl font-bold flex items-center justify-center transition duration-300">&times;</button>
+
+      <div class="flex justify-center mb-6">
+        <img src="{% static 'img/logo.png' %}" alt="App Logo" class="h-12">
+      </div>
+
+      <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-gray-100 mb-6">Welcome Back!</h2>
+
+      <form action="{% url 'login' %}" method="POST" class="space-y-4">
+        {% csrf_token %}
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email or Username</label>
+          <input type="text" id="closeSignupModalusername" name="username" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
         </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+          <input type="password" id="password" name="password" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        </div>
+
+        <div class="text-right">
+          <a href="#" class="text-sm text-blue-500 hover:underline">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-blue-700 dark:hover:bg-blue-600">
+          Log In
+        </button>
+      </form>
+
+      <div class="mt-6 text-center">
+        <p class="text-sm text-gray-600 dark:text-gray-400">Don't have an account?
+          <a href="javascript:void(0);" onclick="closeLoginModal(); openSignupModal();" class="text-blue-500 hover:underline">Sign Up</a>
+        </p>
+      </div>
     </div>
+  </div>
 </div>
+
+<script>
+function openSignupModal() {
+  document.getElementById('signup-modal').classList.remove('hidden');
+}
+function closeSignupModal() {
+  document.getElementById('signup-modal').classList.add('hidden');
+}
+function openLoginModal() {
+  document.getElementById('login-modal').classList.remove('hidden');
+}
+function closeLoginModal() {
+  document.getElementById('login-modal').classList.add('hidden');
+}
+window.onload = function () {
+  const loginFailed = {% if form and form.errors %}true{% else %}false{% endif %};
+  if (loginFailed) {
+    openLoginModal();
+  }
+};
+</script>
 {% endblock %}

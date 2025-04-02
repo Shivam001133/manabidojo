@@ -68,13 +68,10 @@
   // Load saved theme
   window.onload = () => {
     const theme = localStorage.getItem('theme');
-    const html = document.documentElement;
     const icon = document.getElementById("theme-icon");
     if (theme === 'dark') {
-      html.classList.add('dark');
       icon.textContent = '🌜';
     } else {
-      html.classList.remove('dark');
       icon.textContent = '🌞';
     }
   }

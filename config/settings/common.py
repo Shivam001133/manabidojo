@@ -42,8 +42,14 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
-THIRD_PARTY_APPS = []
-LOCAL_APPS = ["manabhi_dojo.users", "manabhi_dojo.languages"]
+THIRD_PARTY_APPS = [
+    "widget_tweaks",
+]
+LOCAL_APPS = [
+    "manabhi_dojo.users",
+    "manabhi_dojo.languages",
+]
+
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
@@ -132,7 +138,7 @@ USE_TZ = True
 AUTH_USER_MODEL = "users.User"
 
 ## login config
-LOGIN_URL = "/login/"
+LOGIN_URL = "/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/login/"
 

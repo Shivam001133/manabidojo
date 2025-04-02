@@ -10,6 +10,9 @@ db_postgres = postgres()
 DATABASES = {"default": db_postgres}
 
 # Static config
+STATICFILES_DIRS = [
+    BASE_DIR / 'manabhi_dojo' / 'static',
+]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = f"{CLOUDFLARE_R2_CONFIG_OPTIONS['endpoint_url']}/{CLOUDFLARE_R2_CONFIG_OPTIONS['bucket_name']}/static/"
 # media config

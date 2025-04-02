@@ -1,137 +1,119 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
 
-{% block title %}Kanji Lessons - Nihongo App{% endblock %}
+{% block title %}Kanji Chart{% endblock %}
 
 {% block style %}
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <style>
-  /* Kanji Lessons specific styling */
-  .kanji-card {
-    background-color: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  .card-wrapper {
+    perspective: 1200px;
+    width: 160px;
+    height: auto;
   }
 
-  .kanji-card:hover {
-    transform: translateY(-10px) scale(1.05);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  .card {
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+    width: 100%;
+    min-height: 220px;
   }
 
-  .kanji-symbol {
-    font-size: 4rem;
-    color: #4FD1C5;
-    text-align: center;
-  }
-
-  .kanji-meaning {
-    font-size: 1.2rem;
-    color: #4A5568;
-    text-align: center;
-  }
-
-  .kanji-details {
-    display: none;
-    margin-top: 15px;
-    text-align: left;
-  }
-
-  .kanji-card.open .kanji-details {
-    display: block;
-  }
-
-  .kanji-tab {
-    margin: 10px 0;
-    padding: 10px;
-    background-color: #EDF2F7;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-
-  .kanji-tab:hover {
-    background-color: #E2E8F0;
-  }
-
-  .kanji-stroke {
-    display: none;
-    margin-top: 20px;
-  }
-
-  .kanji-card.open .kanji-stroke {
-    display: block;
-  }
-
-  .kanji-progress {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-  }
-
-  .kanji-progress .progress-bar {
-    width: 70%;
-    background-color: #E2E8F0;
-    border-radius: 5px;
-    height: 10px;
-  }
-
-  .kanji-progress .progress-bar span {
-    display: block;
-    background-color: #4FD1C5;
+  .card-inner {
+    position: absolute;
+    width: 100%;
     height: 100%;
+    border-radius: 1rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .card.flip {
+    transform: rotateY(180deg);
+  }
+
+  .card-front {
+    background-color: white;
+  }
+
+  .card-back {
+    background-color: #1f2937; /* gray-800 */
+    transform: rotateY(180deg);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dynamic-text-sm {
+    font-size: 0.75rem;
+  }
+
+  .dynamic-text-md {
+    font-size: 0.9rem;
+  }
+
+  .dynamic-text-lg {
+    font-size: 1.1rem;
+  }
+
+  .card-size-sm {
+    height: 220px;
+  }
+
+  .card-size-md {
+    height: 250px;
+  }
+
+  .card-size-lg {
+    height: 300px;
   }
 </style>
 {% endblock %}
-
 {% block content %}
-<div class="p-6 md:p-10 bg-white min-h-screen">
-  <h1 class="text-4xl font-extrabold text-purple-600 mb-6">Kanji Lessons</h1>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-4">
+    <h1 class="text-3xl font-bold text-center text-purple-700 dark:text-purple-300 mb-8">Kanji Chart</h1>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {% for kanji in kanji_characters %}
-      <div class="kanji-card" id="kanji-card-{{ kanji.id }}">
-        <div class="kanji-symbol">{{ kanji.symbol }}</div>
-        <div class="kanji-meaning">{{ kanji.meaning }}</div>
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 max-w-7xl mx-auto">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 justify-center">
 
-        <div class="kanji-details">
-          <!-- Accordion: Details like readings, example words -->
-          <div class="kanji-tab" onclick="toggleTab({{ kanji.id }})">Meaning & Reading</div>
-          <div class="kanji-tab" onclick="toggleTab({{ kanji.id }})">Stroke Order</div>
-          <div class="kanji-tab" onclick="toggleTab({{ kanji.id }})">Examples</div>
+        {% for char in kanji %}
+          {% with char.meaning|length as len %}
+            {% if len <= 20 %}
+              {% with "dynamic-text-lg card-size-sm" as size_class %}
+                {% include "components/card_kanji.html" %}
+              {% endwith %}
+            {% elif len <= 60 %}
+              {% with "dynamic-text-md card-size-md" as size_class %}
+                {% include "components/card_kanji.html" %}
+              {% endwith %}
+            {% else %}
+              {% with "dynamic-text-sm card-size-lg" as size_class %}
+              {% include "components/card_kanji.html" %}
+              {% endwith %}
+            {% endif %}
+          {% endwith %}
+        {% endfor %}
 
-          <div class="kanji-stroke">
-            <canvas id="canvas-{{ kanji.id }}" width="300" height="300" class="border-2 border-gray-300"></canvas>
-            <button onclick="startDrawing({{ kanji.id }})" class="mt-2 py-2 px-4 bg-blue-600 text-white rounded-full">Draw This Kanji</button>
-          </div>
-
-          <div class="kanji-progress">
-            <div class="progress-bar">
-              <span style="width: {{ kanji.progress_percentage }}%"></span>
-            </div>
-            <span>{{ kanji.progress_percentage }}% Learned</span>
-          </div>
-        </div>
       </div>
-    {% endfor %}
+    </div>
   </div>
-</div>
 
 <script>
-  // Toggle the details tab for each kanji card
-  function toggleTab(kanjiId) {
-    const card = document.getElementById(`kanji-card-${kanjiId}`);
-    card.classList.toggle('open');
+  function flipCard(id) {
+    const card = document.getElementById('card-' + id);
+    card.classList.toggle('flip');
   }
 
-  // Drawing functionality (simplified version)
-  function startDrawing(kanjiId) {
-    const canvas = document.getElementById(`canvas-${kanjiId}`);
-    const ctx = canvas.getContext('2d');
-    
-    // Example stroke - Add stroke logic or animation here
-    ctx.beginPath();
-    ctx.moveTo(10, 10);
-    ctx.lineTo(150, 150);
-    ctx.stroke();
+  function playAudio(id) {
+    const audio = document.getElementById('audio-' + id);
+    if (audio) {
+      audio.play().catch(err => console.error("Audio error:", err));
+    }
   }
 </script>
 {% endblock %}

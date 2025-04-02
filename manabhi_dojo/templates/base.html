@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth" id="html-root">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,17 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <!-- Script for theme (Dark/Light) -->
+  <script>
+    (function() {
+      const theme = localStorage.getItem("theme");
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    })();
+  </script>  
 
   <!-- TailwindCSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -23,7 +34,7 @@
       },
     }
   </script>
-  {% block script %}{% endblock %}
+  {% block style %}{% endblock %} 
 
   <!-- Extra head content -->
   {% block head %}{% endblock %}

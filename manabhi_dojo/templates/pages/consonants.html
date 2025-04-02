@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Kana Chart{% endblock %}
+
+{% block style %}
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<style>
+  .animate-click {
+    animation: click-animation 0.3s ease;
+  }
+
+  @keyframes click-animation {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-4">
+    <h1 class="text-3xl font-bold text-center text-purple-700 dark:text-purple-300 mb-8">Kana Chart</h1>
+
+    <!-- 📦 Outer Container Box -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 max-w-7xl mx-auto">
+
+      <!-- 🎯 Responsive Grid of Kana Cards -->
+      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6">
+        {% for char in consonants %}
+          <div class="flex flex-col items-center justify-center p-2">
+
+            <!-- Individual Card -->
+            <div 
+              class="bg-white dark:bg-gray-700 rounded-2xl p-4 shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 w-24 h-32 flex flex-col items-center justify-between cursor-pointer"
+              id="kana-card-{{ char.id }}"
+              onclick="playAudio('{{ char.id }}')"
+            >
+              <!-- Hiragana/Katakana symbol -->
+              <div class="bg-white dark:bg-gray-600 rounded-xl shadow-inner w-16 h-16 flex items-center justify-center">
+                <span class="text-3xl font-bold text-purple-600 dark:text-purple-300">{{ char.symbol }}</span>
+              </div>
+
+              <!-- Romaji text -->
+              <div class="bg-gray-100 dark:bg-gray-600 rounded-md shadow-inner w-16 h-8 flex items-center justify-center mt-2">
+                <span class="text-sm font-medium text-purple-700 dark:text-purple-200">{{ char.romaji }}</span>
+              </div>
+            </div>
+
+            <!-- Optional Audio -->
+            {% if char.audio %}
+              <audio id="audio-{{ char.id }}">
+                <source src="{{ char.audio.url }}" type="audio/mpeg">
+              </audio>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Play Script -->
+  <script>
+    function playAudio(id) {
+      const audio = document.getElementById(`audio-${id}`);
+      const card = document.getElementById(`kana-card-${id}`);
+      if (audio) {
+        audio.play().catch(err => console.error(err));
+      }
+      card.classList.add("animate-click");
+      setTimeout(() => {
+        card.classList.remove("animate-click");
+      }, 300);
+    }
+  </script>
+{% endblock %}
