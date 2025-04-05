@@ -1,14 +1,35 @@
 from django.shortcuts import render
-from django.conf import settings
+from django.db.models import Q
 from manabhi_dojo.languages.models import Character, Kanji
 from django.contrib.auth.decorators import login_required
 
+from django.shortcuts import render
+from manabhi_dojo.languages.models import Character, LanguageScript, TypeScriptCharacter
+
 
 def hiragana_view(request):
-    consonants = Character.objects.all()
+    # Fetch characters from the database
+    basic_hiragana = Character.objects.filter(
+        script=LanguageScript.HIRAGANA, script_type=TypeScriptCharacter.NONE
+    ).order_by("order")
+
+    # Organize characters into the 3 sections
+    dakuten_handakuten = Character.objects.filter(
+        script=LanguageScript.HIRAGANA, 
+        script_type__in=[TypeScriptCharacter.DAKUTEN, TypeScriptCharacter.HANDAKUTEN]
+    ).order_by("order")
+
+    yoon_combinations = Character.objects.filter(
+        script=LanguageScript.HIRAGANA, 
+        script_type=TypeScriptCharacter.Yoon
+    ).order_by("order")
+
 
     return render(request, 'pages/consonants.html', {
-        'consonants': consonants,
+        'title': "Hiragana Chart",
+        'basic_hiragana': basic_hiragana,
+        'dakuten_handakuten': dakuten_handakuten,
+        'yoon_combinations': yoon_combinations,
     })
 
 

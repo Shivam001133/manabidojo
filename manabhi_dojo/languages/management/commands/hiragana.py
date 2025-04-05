@@ -198,7 +198,6 @@ class Command(BaseCommand):
                 defaults={
                     "romaji": character["romaji"],
                     "example_word": character["example_word"],
-                    "meaning": None,
                 },
             )
             if created or not obj.audio:

@@ -43,7 +43,7 @@ class Character(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ('script', 'order')
+        unique_together = ('script', 'script_type', 'order')
 
 
     def __str__(self):
