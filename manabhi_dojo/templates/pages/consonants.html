@@ -19,8 +19,12 @@
 {% endblock %}
 
 {% block content %}
+
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-4">
     <h1 class="text-3xl font-bold text-center text-purple-700 dark:text-purple-300 mb-8">{{title}}</h1>
+    <div class="hidden md:flex space-x-6 text-gray-700 dark:text-gray-200">
+      <a href="{% url 'languages:quiz' %}" class="hover:text-indigo-500 dark:hover:text-indigo-400">Quize</a>
+    </div>
 
     <!-- 📦 Outer Container Box -->
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 max-w-7xl mx-auto">
