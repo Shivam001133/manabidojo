@@ -44,6 +44,7 @@ DJANGO_APPS = [
 ]
 THIRD_PARTY_APPS = [
     "widget_tweaks",
+    "django_extensions",
 ]
 LOCAL_APPS = [
     "manabhi_dojo.users",

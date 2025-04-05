@@ -3,32 +3,17 @@ from django.utils.html import format_html
 from .models import LanguageScript, Character, Kanji
 
 
-class CharacterInline(admin.TabularInline):
-    model = Character
-    extra = 1
-    fields = ("symbol", "romaji", "meaning", "example_word", "audio")
-    show_change_link = True
-
-
-@admin.register(LanguageScript)
-class LanguageScriptAdmin(admin.ModelAdmin):
-    list_display = ("title", "name", "description")
-    search_fields = ("title", "name")
-    inlines = [CharacterInline]
-
-
 @admin.register(Character)
 class CharacterAdmin(admin.ModelAdmin):
     list_display = (
         "symbol",
-        "romaji",
         "script",
-        "meaning",
-        "example_word",
+        "script_type",
+        "order",
         "audio_preview",
     )
     search_fields = ("symbol", "romaji", "example_word", "meaning")
-    list_filter = ("script",)
+    list_filter = ("symbol", "script", "script_type",)
 
     def audio_preview(self, obj):
         if obj.audio:
@@ -48,7 +33,6 @@ class KanjiAdmin(admin.ModelAdmin):
         "kunyomi",
         "jlpt_level",
         "grade",
-        "stroke_count",
         "audio_player",
     )
     search_fields = ("character", "onyomi", "kunyomi", "meaning")

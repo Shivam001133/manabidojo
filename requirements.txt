@@ -10,3 +10,5 @@ python-decouple
 gunicorn
 boto3
 django-widget-tweaks
+django-extensions
+ipython

@@ -49,3 +49,8 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.full_name or self.user.email or f"Profile #{self.pk}"
+
+
+# class ScriptProgres(models.Model):
+#     is_read = models.BooleanField(default=True)
+

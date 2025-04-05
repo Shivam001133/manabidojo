@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.conf import settings
-from manabhi_dojo.languages.models import Character, HiraganaProgress, Kanji
+from manabhi_dojo.languages.models import Character, Kanji
 from django.contrib.auth.decorators import login_required
 
 
