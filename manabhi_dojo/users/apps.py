@@ -11,4 +11,4 @@ class UsersConfig(AppConfig):
 
     def ready(self):
         with contextlib.suppress(ImportError):
-            from manabhi_dojo.users import signals  #noqa: F401
+            from manabhi_dojo.users import signals  # noqa: F401

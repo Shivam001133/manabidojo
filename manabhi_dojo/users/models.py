@@ -42,7 +42,7 @@ class Profile(models.Model):
     )
     full_name = models.CharField(max_length=255, blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
-    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
     dob = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=10, blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
@@ -53,4 +53,3 @@ class Profile(models.Model):
 
 # class ScriptProgres(models.Model):
 #     is_read = models.BooleanField(default=True)
-

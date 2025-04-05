@@ -60,12 +60,12 @@ def home_view(request):
         form = UserSignUpForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
+            user.set_password(form.cleaned_data["password"])
             user.save()
 
             # Handle avatar if present
-            avatar = form.cleaned_data.get('avatar')
-            if avatar and hasattr(user, 'profile'):
+            avatar = form.cleaned_data.get("avatar")
+            if avatar and hasattr(user, "profile"):
                 user.profile.avatar = avatar
                 user.profile.save()
 
@@ -74,18 +74,17 @@ def home_view(request):
     else:
         form = UserSignUpForm()
 
-    return render(request, "index.html", {
-        "form": form,
-        "success": request.GET.get("success") == "true"
-    })
+    return render(
+        request, "index.html", {"form": form, "success": request.GET.get("success") == "true"}
+    )
 
 
 def get_user_progress(user):
     return {
-        'completed_lessons': 45,
-        'current_streak': 7,
-        'points_earned': 350,
-        'n5_progress': 60,
+        "completed_lessons": 45,
+        "current_streak": 7,
+        "points_earned": 350,
+        "n5_progress": 60,
     }
 
 
@@ -96,16 +95,24 @@ def dashboard(request):
 
     user_progress = get_user_progress(request.user)
 
-    return render(request, 'pages/dashboard.html', {
-        'user_progress': user_progress,
-        'user': request.user,
-    })
+    return render(
+        request,
+        "pages/dashboard.html",
+        {
+            "user_progress": user_progress,
+            "user": request.user,
+        },
+    )
 
 
 @login_required
 def profile_view(request):
     user_profile = Profile.objects.get(user=request.user)
 
-    return render(request, 'user/profile.html', {
-        'user_profile': user_profile,
-    })
+    return render(
+        request,
+        "user/profile.html",
+        {
+            "user_profile": user_profile,
+        },
+    )

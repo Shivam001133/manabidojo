@@ -13,7 +13,10 @@ class CharacterAdmin(admin.ModelAdmin):
         "audio_preview",
     )
     search_fields = ("symbol", "romaji", "example_word", "meaning")
-    list_filter = ("script", "script_type",)
+    list_filter = (
+        "script",
+        "script_type",
+    )
 
     def audio_preview(self, obj):
         if obj.audio:

@@ -5,6 +5,7 @@ from django.core.files.base import ContentFile
 import io
 from os import path
 
+
 class Command(BaseCommand):
     help = "Seed all 46 basic Hiragana characters into the database and generate audio"
 
@@ -17,8 +18,8 @@ class Command(BaseCommand):
         # Check if the character already has an audio file associated
         if character.audio:
             self.stdout.write(f"🎵 Audio file already exists: {character.audio.name}")
-            return 
-        
+            return
+
         # Generate the audio
         tts = gTTS(text=character.symbol, lang="ja")
         buffer = io.BytesIO()
@@ -149,11 +150,23 @@ class Command(BaseCommand):
             {"symbol": "きょ", "romaji": "kyo", "example_word": "きょう (kyou - today)"},
             {"symbol": "しゃ", "romaji": "sha", "example_word": "しゃしん (shashin - photo)"},
             {"symbol": "しゅ", "romaji": "shu", "example_word": "しゅくだい (shukudai - homework)"},
-            {"symbol": "しょ", "romaji": "sho", "example_word": "しょうがっこう (shougakkou - elementary school)"},
+            {
+                "symbol": "しょ",
+                "romaji": "sho",
+                "example_word": "しょうがっこう (shougakkou - elementary school)",
+            },
             {"symbol": "ちゃ", "romaji": "cha", "example_word": "ちゃわん (chawan - bowl)"},
             {"symbol": "ちゅ", "romaji": "chu", "example_word": "ちゅうごく (chuugoku - China)"},
-            {"symbol": "ちょ", "romaji": "cho", "example_word": "ちょうちょう (chouchou - butterfly)"},
-            {"symbol": "ぢゃ", "romaji": "dya", "example_word": "ぢゃんけん (janken - rock-paper-scissors)"},
+            {
+                "symbol": "ちょ",
+                "romaji": "cho",
+                "example_word": "ちょうちょう (chouchou - butterfly)",
+            },
+            {
+                "symbol": "ぢゃ",
+                "romaji": "dya",
+                "example_word": "ぢゃんけん (janken - rock-paper-scissors)",
+            },
             {"symbol": "ぢゅ", "romaji": "dyu", "example_word": "ぢゅう (juu - ten)"},
             {"symbol": "ぢょ", "romaji": "dyo", "example_word": "ぢょう (jou - situation)"},
             {"symbol": "にゃ", "romaji": "nya", "example_word": "にゃんこ (nyanko - cat)"},
@@ -180,9 +193,8 @@ class Command(BaseCommand):
             (main_list, TypeScriptCharacter.NONE),
             (dakuten, TypeScriptCharacter.DAKUTEN),
             (handakuten, TypeScriptCharacter.HANDAKUTEN),
-            (yoon, TypeScriptCharacter.Yoon)
+            (yoon, TypeScriptCharacter.Yoon),
         ]
-
 
     def insert_to_db(self, script, script_type):
         """
@@ -212,9 +224,7 @@ class Command(BaseCommand):
         for character in characters_to_create:
             self.generate_audio_for_character(character)
 
-        self.stdout.write(
-            self.style.SUCCESS("✅ Hiragana characters seeded and audio generated!")
-        )
+        self.stdout.write(self.style.SUCCESS("✅ Hiragana characters seeded and audio generated!"))
 
     def handle(self, *args, **kwargs):
         # Insert Hiragana characters

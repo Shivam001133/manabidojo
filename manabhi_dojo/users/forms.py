@@ -9,7 +9,7 @@ class UserAdminCreationForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ('username', 'email')
+        fields = ("username", "email")
 
     def clean(self):
         cleaned_data = super().clean()
@@ -25,7 +25,7 @@ class UserAdminChangeForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ('username', 'email')
+        fields = ("username", "email")
 
     def clean(self):
         cleaned_data = super().clean()
@@ -42,20 +42,28 @@ class UserSignUpForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ['username', 'email', 'avatar', 'password', 'password_confirmation']  # Explicitly include all fields
+        fields = [
+            "username",
+            "email",
+            "avatar",
+            "password",
+            "password_confirmation",
+        ]  # Explicitly include all fields
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field.widget.attrs.update({
-                'class': (
-                    'w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg '
-                    'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 '
-                    'placeholder-gray-400 dark:placeholder-gray-500 '
-                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-                ),
-                'placeholder': f'Enter your {field.label.lower()}'
-            })
+            field.widget.attrs.update(
+                {
+                    "class": (
+                        "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg "
+                        "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 "
+                        "placeholder-gray-400 dark:placeholder-gray-500 "
+                        "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    ),
+                    "placeholder": f"Enter your {field.label.lower()}",
+                }
+            )
 
     def clean(self):
         cleaned_data = super().clean()

@@ -24,7 +24,6 @@ from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
-
 urlpatterns = [
     path("", include(users_urls), name="home"),
     path("admin/", admin.site.urls),

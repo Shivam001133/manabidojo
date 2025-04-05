@@ -27,7 +27,7 @@
 
       <!-- 🎯 Responsive Grid of Kana Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-0"> <!-- Updated grid configuration for 5 blocks -->
-        {% for char in basic_hiragana %}
+        {% for char in basic %}
           <div class="flex flex-col items-center justify-center p-0"> <!-- Removed padding for no space between blocks -->
 
             <!-- Individual Card -->
@@ -66,7 +66,7 @@
 
       <!-- 🎯 Responsive Grid of Kana Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-0">
-        {% for char in dakuten_handakuten %}
+        {% for char in dakuten %}
           <div class="flex flex-col items-center justify-center p-2">
 
             <!-- Individual Card -->
@@ -105,7 +105,7 @@
 
       <!-- 🎯 Responsive Grid of Kana Cards -->
       <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6">
-        {% for char in yoon_combinations %}
+        {% for char in yoon %}
           <div class="flex flex-col items-center justify-center p-2">
 
             <!-- Individual Card -->

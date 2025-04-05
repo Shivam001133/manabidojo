@@ -22,20 +22,14 @@ class TypeScriptCharacter(models.TextChoices):
 
 class Character(models.Model):
     script = models.CharField(
-        choices=LanguageScript.choices, default=LanguageScript.NONE,
-        max_length=2, db_index=True
+        choices=LanguageScript.choices, default=LanguageScript.NONE, max_length=2, db_index=True
     )
     symbol = models.CharField(max_length=5)
     romaji = models.CharField(max_length=20, blank=True, null=True)
     example_word = models.CharField(max_length=100, blank=True, null=True)
-    audio = models.FileField(
-        upload_to=character_audio_upload_path,
-        blank=True, null=True
-    )
+    audio = models.FileField(upload_to=character_audio_upload_path, blank=True, null=True)
     script_type = models.CharField(
-        choices=TypeScriptCharacter.choices,
-        default=TypeScriptCharacter.NONE,
-        db_index=True
+        choices=TypeScriptCharacter.choices, default=TypeScriptCharacter.NONE, db_index=True
     )
     order = models.PositiveIntegerField(default=0)
 
@@ -43,8 +37,7 @@ class Character(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ('script', 'script_type', 'order')
-
+        unique_together = ("script", "script_type", "order")
 
     def __str__(self):
         return self.symbol
