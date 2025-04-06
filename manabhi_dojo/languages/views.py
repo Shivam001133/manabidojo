@@ -97,18 +97,3 @@ def quiz_answer(request):
             return HttpResponse("Correct!")
         else:
             return HttpResponse("Wrong! The correct answer was: " + correct_answer)
-
-
-@login_required
-def lesson_view(request):
-    characters = Character.objects.all()
-
-    return render(
-        request,
-        "pages/quiz.html",
-        {
-            "lesson": [],
-            "characters": characters,
-            "quiz_questions": [],
-        },
-    )

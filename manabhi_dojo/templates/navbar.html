@@ -37,11 +37,11 @@
 
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2 text-gray-700 dark:text-gray-200">
-    <a href="" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Dashboard</a>
-    <a href="" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Hiragana</a>
+    <a href="{% url 'users:dashboard' %}" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Dashboard</a>
+    <a href="{% url 'languages:hiragana' %}" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Hiragana</a>
     <a href="{% url 'languages:katakana' %}" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Katakana</a>
-    <a href="" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Kanji</a>
-    <a href="" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Profile</a>
+    <a href="{% url 'languages:kanji' %}" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Kanji</a>
+    <a href="{% url 'users:profile' %}" class="block hover:text-indigo-500 dark:hover:text-indigo-400">Profile</a>
   </div>
 </nav>
 
