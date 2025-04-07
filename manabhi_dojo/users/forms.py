@@ -30,7 +30,7 @@ class UserAdminChangeForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
-        if password and len(password) < 8:
+        if password and len(password) < 8:  # noqa: PLR2004
             raise forms.ValidationError("Password must be at least 8 characters long.")
         return cleaned_data
 
@@ -52,14 +52,16 @@ class UserSignUpForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field_name, field in self.fields.items():
+        # self.fields.items() will return field_name, and field
+        # TODO: When using only the values of a dict use the `values()` method
+        for _, field in self.fields.items():  # noqa: PERF102
             field.widget.attrs.update(
                 {
                     "class": (
                         "w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg "
                         "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 "
                         "placeholder-gray-400 dark:placeholder-gray-500 "
-                        "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"  # noqa: E501
                     ),
                     "placeholder": f"Enter your {field.label.lower()}",
                 }

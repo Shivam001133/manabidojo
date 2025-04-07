@@ -54,8 +54,6 @@ user_redirect_view = UserRedirectView.as_view()
 
 @csrf_protect
 def home_view(request):
-    success = False
-
     if request.method == "POST":
         form = UserSignUpForm(request.POST, request.FILES)
         if form.is_valid():

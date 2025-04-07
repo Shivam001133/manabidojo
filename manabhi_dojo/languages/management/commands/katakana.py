@@ -1,9 +1,8 @@
 from django.core.management.base import BaseCommand
 from manabhi_dojo.languages.models import Character, LanguageScript, TypeScriptCharacter
-from gtts import gTTS
 from django.core.files.base import ContentFile
+from gtts import gTTS
 import io
-from os import path
 
 
 class Command(BaseCommand):
@@ -34,9 +33,10 @@ class Command(BaseCommand):
 
     def get_script_data(self):
         """
-        Returns the data for the basic Katakana characters including Dakuten, Handakuten, and Yoon variations.
+        Returns the data for the basic Katakana characters including Dakuten, Handakuten,
+        and Yoon variations.
         """
-        katakana_main_list = katakana_characters = [
+        katakana_main_list = [
             {
                 "symbol": "ア",
                 "romaji": "a",
@@ -244,36 +244,6 @@ class Command(BaseCommand):
             (handakuten, TypeScriptCharacter.HANDAKUTEN),
             (yoon, TypeScriptCharacter.Yoon),
         ]
-
-    def insert_to_db(self, script, script_type):
-        """
-        Inserts characters into the database and generates audio if necessary.
-        """
-        characters_to_create = []
-        for order_val, character in enumerate(script):
-            obj, created = Character.objects.get_or_create(
-                script=LanguageScript.KATAKANA,
-                symbol=character["symbol"],
-                script_type=script_type,
-                order=order_val,
-                defaults={
-                    "romaji": character["romaji"],
-                    "example_word": character["example_word"],
-                },
-            )
-            if created or not obj.audio:
-                # Collect objects for audio generation
-                characters_to_create.append(obj)
-            else:
-                self.stdout.write(
-                    f"⏭ Skipped (already exists): {character['symbol']} ({character['romaji']})"
-                )
-
-        # Bulk update characters with audio generation
-        for character in characters_to_create:
-            self.generate_audio_for_character(character)
-
-        self.stdout.write(self.style.SUCCESS("✅ Katakana characters seeded and audio generated!"))
 
     def insert_to_db(self, script, script_type):
         """

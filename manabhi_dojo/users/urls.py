@@ -3,9 +3,6 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 from manabhi_dojo.users.views import (
     home_view,
-    user_detail_view,
-    user_redirect_view,
-    user_update_view,
     dashboard,
     profile_view,
 )

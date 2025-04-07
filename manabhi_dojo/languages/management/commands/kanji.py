@@ -11,9 +11,9 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '-n'
+            "-n",
             type=int,
-            help='No of kanji words',
+            help="No of kanji words",
             default=30,
         )
 
@@ -33,9 +33,7 @@ class Command(BaseCommand):
             self.stdout.write(f"🎵 Audio uploaded to: {kanji_obj.audio.name}")
         except Exception as e:  # noqa: BLE001
             self.stdout.write(
-                self.style.WARNING(
-                    f"⚠️ Audio generation failed for {kanji_obj.character}: {e}"
-                )
+                self.style.WARNING(f"⚠️ Audio generation failed for {kanji_obj.character}: {e}")
             )
 
     def handle(self, *args, **kwargs):
@@ -51,7 +49,7 @@ class Command(BaseCommand):
 
         added = 0
         skipped = 0
-        no_of_words = kwargs['n']
+        no_of_words = kwargs["n"]
 
         for _ in range(no_of_words):
             for character, details in kanji_data.items():
@@ -80,6 +78,4 @@ class Command(BaseCommand):
                     self.stdout.write(f"⏭ Skipped (exists): {character}")
                     skipped += 1
 
-        self.stdout.write(
-            self.style.SUCCESS(f"✅ Finished: {added} added, {skipped} skipped.")
-        )
+        self.stdout.write(self.style.SUCCESS(f"✅ Finished: {added} added, {skipped} skipped."))

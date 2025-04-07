@@ -136,10 +136,12 @@ ignore = [
     "I001",
 # To avide errro for Logging statement uses f-string
     "G004",
-# To ignore commented code 
+# To ignore commented code
     "ERA001",
 # To avide large messages
-    "TRY003"
+    "TRY003",
+# Exception must not use a string literal, assign to variable first
+    "EM101",
 ]
 # The fixes in extend-unsafe-fixes will require
 # provide the `--unsafe-fixes` flag when fixing.

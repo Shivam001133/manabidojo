@@ -1,12 +1,7 @@
 from django.shortcuts import render
-from django.db.models import Q
-from manabhi_dojo.languages.models import Character, Kanji
-from django.contrib.auth.decorators import login_required
-from random import choice
-from django.http import HttpResponse
 
-from django.shortcuts import render
-from manabhi_dojo.languages.models import Character, LanguageScript, TypeScriptCharacter
+# from django.contrib.auth.decorators import login_required
+from manabhi_dojo.languages.models import Character, LanguageScript, TypeScriptCharacter, Kanji
 
 
 def hiragana_view(request):
@@ -76,6 +71,7 @@ def kanji_view(request):
         },
     )
 
+
 HIRA_QUIZ = [
     {"hiragana_symbol": "あ", "options": ["a", "e", "i", "u"], "correct_answer": "a"},
     {"hiragana_symbol": "い", "options": ["a", "i", "u", "e"], "correct_answer": "i"},
@@ -83,17 +79,3 @@ HIRA_QUIZ = [
     {"hiragana_symbol": "え", "options": ["a", "i", "e", "u"], "correct_answer": "e"},
     {"hiragana_symbol": "お", "options": ["o", "i", "e", "u"], "correct_answer": "o"},
 ]
-
-def hiragana_quiz(request):
-    question = choice(HIRA_QUIZ)
-    return render(request, 'pages/quiz.html', {'question': question})
-
-def quiz_answer(request):
-    if request.method == "POST":
-        selected_answer = request.POST.get('answer')
-        correct_answer = request.POST.get('correct_answer')
-
-        if selected_answer == correct_answer:
-            return HttpResponse("Correct!")
-        else:
-            return HttpResponse("Wrong! The correct answer was: " + correct_answer)

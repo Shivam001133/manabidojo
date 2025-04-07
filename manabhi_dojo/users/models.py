@@ -40,12 +40,12 @@ class Profile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
     )
-    full_name = models.CharField(max_length=255, blank=True, null=True)
-    bio = models.TextField(blank=True, null=True)
+    full_name = models.CharField(max_length=255, blank=True)
+    bio = models.TextField(blank=True)
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
     dob = models.DateField(blank=True, null=True)
-    gender = models.CharField(max_length=10, blank=True, null=True)
-    location = models.CharField(max_length=100, blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True)
+    location = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return self.full_name or self.user.email or f"Profile #{self.pk}"

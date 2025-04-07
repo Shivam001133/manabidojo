@@ -25,13 +25,14 @@ class Character(models.Model):
         choices=LanguageScript.choices, default=LanguageScript.NONE, max_length=2, db_index=True
     )
     symbol = models.CharField(max_length=5)
-    romaji = models.CharField(max_length=20, blank=True, null=True)
-    example_word = models.CharField(max_length=100, blank=True, null=True)
+    romaji = models.CharField(max_length=20, blank=True)
+    example_word = models.CharField(max_length=100, blank=True)
     audio = models.FileField(upload_to=character_audio_upload_path, blank=True, null=True)
     script_type = models.CharField(
         choices=TypeScriptCharacter.choices, default=TypeScriptCharacter.NONE, db_index=True
     )
     order = models.PositiveIntegerField(default=0)
+    quiz_options = models.JSONField(default=list)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -45,10 +46,10 @@ class Character(models.Model):
 
 class Kanji(models.Model):
     character = models.CharField(max_length=5, unique=True, db_index=True)
-    onyomi = models.CharField(max_length=100, blank=True, null=True)
-    kunyomi = models.CharField(max_length=100, blank=True, null=True)
-    meaning = models.TextField(blank=True, null=True)
-    jlpt_level = models.CharField(max_length=10, blank=True, null=True)
+    onyomi = models.CharField(max_length=100, blank=True)
+    kunyomi = models.CharField(max_length=100, blank=True)
+    meaning = models.TextField(blank=True)
+    jlpt_level = models.CharField(max_length=10, blank=True)
     grade = models.IntegerField(blank=True, null=True)
     audio = models.FileField(upload_to="kanji_audio/", blank=True, null=True)
     image = models.ImageField(upload_to="kanji/", null=True)
