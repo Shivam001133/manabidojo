@@ -1,72 +1,129 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth" id="html-root">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% block meta %}{% endblock %}
-  <title>{% block title %}Nihongo App{% endblock %}</title>
+{% extends 'base.html' %}
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
-
-  <!-- Script for theme (Dark/Light) -->
-  <script>
-    (function() {
-      const theme = localStorage.getItem("theme");
-      if (theme === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    })();
-  </script>  
-
-  <!-- TailwindCSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {},
-      },
-    }
-  </script>
-  {% block style %}{% endblock %}
-
-  <!-- Extra head content -->
-  {% block head %}{% endblock %}
-</head>
-<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
-
-  <!-- Navbar -->
-  {% include 'navbar.html' %}
-
-  <!-- Main page content -->
-  <main class="flex-grow">
-    {% block content %}
+{% block content %}
+  <div class="quiz-container">
     <section class="text-center py-10">
       <h1 class="text-3xl font-semibold mb-6">Hiragana Quiz</h1>
       <!-- Hiragana character display -->
       <div class="mb-6">
-        <img src="{% static 'img/hiragana/a.png' %}" alt="Hiragana character" class="mx-auto mb-4">
+        <p id="question">{{ question.question }}</p>
       </div>
-
       <!-- Quiz options -->
-      <div class="flex justify-center space-x-4">
-        <button class="bg-purple-500 text-white px-4 py-2 rounded-full hover:bg-purple-600">a</button>
-        <button class="bg-purple-500 text-white px-4 py-2 rounded-full hover:bg-purple-600">i</button>
-        <button class="bg-purple-500 text-white px-4 py-2 rounded-full hover:bg-purple-600">u</button>
-        <button class="bg-purple-500 text-white px-4 py-2 rounded-full hover:bg-purple-600">e</button>
+      <div class="flex justify-center space-x-4" id="options-container">
+        {% for option in question.options %}
+          <button class="option-button bg-purple-500 text-white px-4 py-2 rounded-full hover:bg-purple-600"
+                  data-answer="{{ option }}">{{ option }}</button>
+        {% endfor %}
       </div>
+      <p id="feedback" class="hidden"></p>
     </section>
-    {% endblock %}
-  </main>
+  </div>
+{% endblock content %}
+{% block scripts %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const buttons = document.querySelectorAll(".option-button");
+      const feedbackElement = document.getElementById("feedback");
+      const questionElement = document.getElementById("question");
+      const optionsContainer = document.getElementById("options-container");
 
-  <!-- Footer -->
-  {% include 'footer.html' %}
+      buttons.forEach(button => {
+        button.addEventListener("click", function() {
+          const selectedAnswer = button.dataset.answer;
 
-  <!-- Extra page scripts -->
-  {% block scripts %}{% endblock %}
-</body>
-</html>
+          // Get CSRF token
+          const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+          // Make a POST request to submit the answer
+          fetch("{% url 'languages:hquiz' %}", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: `answer=${selectedAnswer}&csrfmiddlewaretoken=${csrfToken}`
+            })
+            .then(response => response.json())
+            .then(data => {
+              // Feedback for correct or wrong answer
+              if (data.is_correct) {
+                feedbackElement.textContent = "Correct!";
+                feedbackElement.classList.remove("hidden");
+                button.classList.add("bg-green-500");
+              } else {
+                feedbackElement.textContent = "Wrong answer!";
+                feedbackElement.classList.remove("hidden");
+                button.classList.add("bg-red-500");
+              }
+
+              // After some time, show the next question
+              setTimeout(() => {
+                // Update the question and options
+                questionElement.textContent = data.next_question.question;
+                optionsContainer.innerHTML = ''; // Clear previous options
+                data.next_question.options.forEach(option => {
+                  const newButton = document.createElement('button');
+                  newButton.textContent = option;
+                  newButton.classList.add("option-button", "bg-purple-500", "text-white", "px-4", "py-2", "rounded-full", "hover:bg-purple-600");
+                  newButton.dataset.answer = option;
+                  optionsContainer.appendChild(newButton); // Add new button to options container
+                });
+
+                // Hide feedback and reset button colors
+                feedbackElement.classList.add("hidden");
+                buttons.forEach(b => {
+                  b.classList.remove("bg-red-500", "bg-green-500");
+                });
+
+                // Re-bind the click event to new buttons (if necessary)
+                const newButtons = document.querySelectorAll(".option-button");
+                newButtons.forEach(button => {
+                  button.addEventListener("click", function() {
+                    // Handle click event for new question options
+                    const selectedAnswer = button.dataset.answer;
+                    // POST request to submit answer and get next question
+                    fetch("{% url 'languages:hquiz' %}", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: `answer=${selectedAnswer}&csrfmiddlewaretoken=${csrfToken}`
+                      })
+                      .then(response => response.json())
+                      .then(data => {
+                        if (data.is_correct) {
+                          feedbackElement.textContent = "Correct!";
+                          feedbackElement.classList.remove("hidden");
+                          button.classList.add("bg-green-500");
+                        } else {
+                          feedbackElement.textContent = "Wrong answer!";
+                          feedbackElement.classList.remove("hidden");
+                          button.classList.add("bg-red-500");
+                        }
+
+                        // After some time, show the next question
+                        setTimeout(() => {
+                          questionElement.textContent = data.next_question.question;
+                          optionsContainer.innerHTML = ''; // Clear previous options
+                          data.next_question.options.forEach(option => {
+                            const newButton = document.createElement('button');
+                            newButton.textContent = option;
+                            newButton.classList.add("option-button", "bg-purple-500", "text-white", "px-4", "py-2", "rounded-full", "hover:bg-purple-600");
+                            newButton.dataset.answer = option;
+                            optionsContainer.appendChild(newButton); // Add new button to options container
+                          });
+
+                          feedbackElement.classList.add("hidden");
+                          newButtons.forEach(b => {
+                            b.classList.remove("bg-red-500", "bg-green-500");
+                          });
+                        }, 1000); // Delay before showing next question
+                      });
+                  });
+                });
+              }, 1000); // Delay before showing next question
+            });
+        });
+      });
+    });
+  </script>
+{% endblock scripts %}

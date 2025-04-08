@@ -1,33 +1,40 @@
 {% load static %}
+
 <footer class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-sm mt-10 px-4 py-6">
   <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-    
     <!-- Branding and decorative icons -->
     <div class="flex items-center space-x-2">
-      <!-- Decorative Cherry Blossoms -->
-      <img src="{% static 'img/cherry-blossom.svg' %}" alt="🌸" class="w-4 h-4">
-      <img src="{% static 'img/cherry-blossom.svg' %}" alt="🌸" class="w-4 h-4">
-      <img src="{% static 'img/cherry-blossom.svg' %}" alt="🌸" class="w-4 h-4">
+      <!-- Decorative Cherry Blossoms (with alt text for accessibility) -->
+      <img src="{% static 'img/cherry-blossom.svg' %}"
+           alt="Decorative cherry blossom icon"
+           class="w-4 h-4" />
+      <img src="{% static 'img/cherry-blossom.svg' %}"
+           alt="Decorative cherry blossom icon"
+           class="w-4 h-4" />
+      <img src="{% static 'img/cherry-blossom.svg' %}"
+           alt="Decorative cherry blossom icon"
+           class="w-4 h-4" />
       <span class="ml-2">© 2025 NihongoApp</span>
     </div>
-
     <!-- Links -->
     <div class="flex space-x-4">
       <a href="" class="hover:text-indigo-500">About</a>
       <a href="" class="hover:text-indigo-500">Contact</a>
-      <a href="https://twitter.com/yourapp" target="_blank" class="hover:text-indigo-500">Twitter</a>
+      <a href="https://twitter.com/yourapp"
+         target="_blank"
+         class="hover:text-indigo-500">Twitter</a>
     </div>
-
-    <!-- Language Toggle (optional) -->
+    <!-- Language Toggle -->
     <div>
-      <form method="post" action="url 'set_language' ">
+      <form method="post" action="{% url 'users:set_language' %}">
         {% csrf_token %}
-        <select name="language" onchange="this.form.submit()" class="bg-transparent dark:bg-gray-700 rounded px-2 py-1 border border-gray-300 dark:border-gray-600 text-sm">
+        <select name="language"
+                onchange="this.form.submit()"
+                class="bg-transparent dark:bg-gray-700 rounded px-2 py-1 border border-gray-300 dark:border-gray-600 text-sm transition duration-200 ease-in-out hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
           <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
           <option value="ja" {% if LANGUAGE_CODE == 'ja' %}selected{% endif %}>日本語</option>
         </select>
       </form>
     </div>
-
   </div>
 </footer>

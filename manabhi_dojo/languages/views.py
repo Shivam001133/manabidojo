@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 # from django.contrib.auth.decorators import login_required
 from manabhi_dojo.languages.models import Character, LanguageScript, TypeScriptCharacter, Kanji
+from django.http import JsonResponse
+import random
 
 
 def hiragana_view(request):
@@ -72,10 +74,26 @@ def kanji_view(request):
     )
 
 
-HIRA_QUIZ = [
-    {"hiragana_symbol": "あ", "options": ["a", "e", "i", "u"], "correct_answer": "a"},
-    {"hiragana_symbol": "い", "options": ["a", "i", "u", "e"], "correct_answer": "i"},
-    {"hiragana_symbol": "う", "options": ["a", "i", "u", "e"], "correct_answer": "u"},
-    {"hiragana_symbol": "え", "options": ["a", "i", "e", "u"], "correct_answer": "e"},
-    {"hiragana_symbol": "お", "options": ["o", "i", "e", "u"], "correct_answer": "o"},
-]
+def hiragana_quiz(request):
+    # Fetch all quiz options for Hiragana characters
+    hiragana_list = Character.objects.filter(script=LanguageScript.HIRAGANA)
+
+    # Get a random question (using the first quiz option)
+    current_question = random.choice(hiragana_list).quiz_options[0]
+
+    if request.method == "POST":
+        selected_answer = request.POST.get("answer")
+        is_correct = selected_answer == current_question["answer"]
+
+        # Send the result and the next question
+        next_question = random.choice(hiragana_list).quiz_options[0]  # New random question
+
+        return JsonResponse(
+            {
+                "is_correct": is_correct,
+                "next_question": next_question,  # Provide a new random question
+            }
+        )
+
+    # Render the initial page with a random question
+    return render(request, "pages/quiz.html", {"question": current_question})

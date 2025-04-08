@@ -574,7 +574,7 @@ class Command(BaseCommand):
                 "symbol": "ぱ",
                 "romaji": "pa",
                 "example_word": "ぱん (pan - bread)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぱ", "options": ["pe", "pi", "pa", "pu"], "answer": "pa"}
                 ],
             },
@@ -582,7 +582,7 @@ class Command(BaseCommand):
                 "symbol": "ぴ",
                 "romaji": "pi",
                 "example_word": "ぴあの (piano)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぴ", "options": ["pu", "po", "pa", "pi"], "answer": "pi"}
                 ],
             },
@@ -590,7 +590,7 @@ class Command(BaseCommand):
                 "symbol": "ぷ",
                 "romaji": "pu",
                 "example_word": "ぷーる (puuru - pool)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぷ", "options": ["pu", "pa", "po", "pi"], "answer": "pu"}
                 ],
             },
@@ -598,7 +598,7 @@ class Command(BaseCommand):
                 "symbol": "ぺ",
                 "romaji": "pe",
                 "example_word": "ぺん (pen - pen)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぺ", "options": ["pe", "pi", "pu", "po"], "answer": "pe"}
                 ],
             },
@@ -606,7 +606,7 @@ class Command(BaseCommand):
                 "symbol": "ぽ",
                 "romaji": "po",
                 "example_word": "ぽけっと (poketto - pocket)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぽ", "options": ["po", "pi", "pu", "pe"], "answer": "po"}
                 ],
             },
@@ -617,7 +617,7 @@ class Command(BaseCommand):
                 "symbol": "きゃ",
                 "romaji": "kya",
                 "example_word": "きゃく (kyaku - guest)",
-                "options": [
+                "quiz_options": [
                     {"question": "きゃ", "options": ["chu", "mya", "kya", "gyu"], "answer": "kya"}
                 ],
             },
@@ -625,7 +625,7 @@ class Command(BaseCommand):
                 "symbol": "きゅ",
                 "romaji": "kyu",
                 "example_word": "きゅう (kyuu - nine)",
-                "options": [
+                "quiz_options": [
                     {"question": "きゅ", "options": ["kyu", "dya", "pya", "ryo"], "answer": "kyu"}
                 ],
             },
@@ -633,7 +633,7 @@ class Command(BaseCommand):
                 "symbol": "きょ",
                 "romaji": "kyo",
                 "example_word": "きょう (kyou - today)",
-                "options": [
+                "quiz_options": [
                     {"question": "きょ", "options": ["kyo", "nyo", "mya", "cha"], "answer": "kyo"}
                 ],
             },
@@ -641,7 +641,7 @@ class Command(BaseCommand):
                 "symbol": "しゃ",
                 "romaji": "sha",
                 "example_word": "しゃしん (shashin - photo)",
-                "options": [
+                "quiz_options": [
                     {"question": "しゃ", "options": ["chu", "shu", "dyo", "sha"], "answer": "sha"}
                 ],
             },
@@ -649,7 +649,7 @@ class Command(BaseCommand):
                 "symbol": "しゅ",
                 "romaji": "shu",
                 "example_word": "しゅくだい (shukudai - homework)",
-                "options": [
+                "quiz_options": [
                     {"question": "しゅ", "options": ["sho", "shu", "myu", "hyu"], "answer": "shu"}
                 ],
             },
@@ -657,7 +657,7 @@ class Command(BaseCommand):
                 "symbol": "しょ",
                 "romaji": "sho",
                 "example_word": "しょうがっこう (shougakkou - elementary school)",
-                "options": [
+                "quiz_options": [
                     {"question": "しょ", "options": ["gyo", "sho", "hyu", "nyu"], "answer": "sho"}
                 ],
             },
@@ -665,7 +665,7 @@ class Command(BaseCommand):
                 "symbol": "ちゃ",
                 "romaji": "cha",
                 "example_word": "ちゃわん (chawan - bowl)",
-                "options": [
+                "quiz_options": [
                     {"question": "ちゃ", "options": ["hyo", "cha", "mya", "chu"], "answer": "cha"}
                 ],
             },
@@ -673,7 +673,7 @@ class Command(BaseCommand):
                 "symbol": "ちゅ",
                 "romaji": "chu",
                 "example_word": "ちゅうごく (chuugoku - China)",
-                "options": [
+                "quiz_options": [
                     {"question": "ちゅ", "options": ["chu", "pyo", "gyo", "gya"], "answer": "chu"}
                 ],
             },
@@ -681,7 +681,7 @@ class Command(BaseCommand):
                 "symbol": "ちょ",
                 "romaji": "cho",
                 "example_word": "ちょうちょう (chouchou - butterfly)",
-                "options": [
+                "quiz_options": [
                     {"question": "ちょ", "options": ["pya", "pyu", "cho", "nyo"], "answer": "cho"}
                 ],
             },
@@ -689,7 +689,7 @@ class Command(BaseCommand):
                 "symbol": "ぢゃ",
                 "romaji": "dya",
                 "example_word": "ぢゃんけん (janken - rock-paper-scissors)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぢゃ", "options": ["pyo", "mya", "dyu", "dya"], "answer": "dya"}
                 ],
             },
@@ -697,7 +697,7 @@ class Command(BaseCommand):
                 "symbol": "ぢゅ",
                 "romaji": "dyu",
                 "example_word": "ぢゅう (juu - ten)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぢゅ", "options": ["cha", "dyu", "cho", "kya"], "answer": "dyu"}
                 ],
             },
@@ -705,7 +705,7 @@ class Command(BaseCommand):
                 "symbol": "ぢょ",
                 "romaji": "dyo",
                 "example_word": "ぢょう (jou - situation)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぢょ", "options": ["dyo", "gyo", "hyo", "nyu"], "answer": "dyo"}
                 ],
             },
@@ -713,7 +713,7 @@ class Command(BaseCommand):
                 "symbol": "にゃ",
                 "romaji": "nya",
                 "example_word": "にゃんこ (nyanko - cat)",
-                "options": [
+                "quiz_options": [
                     {"question": "にゃ", "options": ["nya", "shu", "chu", "dyu"], "answer": "nya"}
                 ],
             },
@@ -721,7 +721,7 @@ class Command(BaseCommand):
                 "symbol": "にゅ",
                 "romaji": "nyu",
                 "example_word": "にゅうりょく (nyuuryoku - input)",
-                "options": [
+                "quiz_options": [
                     {"question": "にゅ", "options": ["nyu", "shu", "sha", "chu"], "answer": "nyu"}
                 ],
             },
@@ -729,7 +729,7 @@ class Command(BaseCommand):
                 "symbol": "にょ",
                 "romaji": "nyo",
                 "example_word": "にょき (nyoki - growth)",
-                "options": [
+                "quiz_options": [
                     {"question": "にょ", "options": ["sho", "nyo", "shu", "dya"], "answer": "nyo"}
                 ],
             },
@@ -737,7 +737,7 @@ class Command(BaseCommand):
                 "symbol": "ひゃ",
                 "romaji": "hya",
                 "example_word": "ひゃく (hyaku - hundred)",
-                "options": [
+                "quiz_options": [
                     {"question": "ひゃ", "options": ["dyu", "pyu", "sha", "hya"], "answer": "hya"}
                 ],
             },
@@ -745,7 +745,7 @@ class Command(BaseCommand):
                 "symbol": "ひゅ",
                 "romaji": "hyu",
                 "example_word": "ひゅうが (hyuuga - the sun)",
-                "options": [
+                "quiz_options": [
                     {"question": "ひゅ", "options": ["hyu", "ryo", "chu", "shu"], "answer": "hyu"}
                 ],
             },
@@ -753,7 +753,7 @@ class Command(BaseCommand):
                 "symbol": "ひょ",
                 "romaji": "hyo",
                 "example_word": "ひょう (hyou - leopard)",
-                "options": [
+                "quiz_options": [
                     {"question": "ひょ", "options": ["myo", "hyo", "sha", "pyu"], "answer": "hyo"}
                 ],
             },
@@ -761,7 +761,7 @@ class Command(BaseCommand):
                 "symbol": "みゃ",
                 "romaji": "mya",
                 "example_word": "みゃく (myaku - pulse)",
-                "options": [
+                "quiz_options": [
                     {"question": "みゃ", "options": ["mya", "chu", "kyo", "sha"], "answer": "mya"}
                 ],
             },
@@ -769,7 +769,7 @@ class Command(BaseCommand):
                 "symbol": "みゅ",
                 "romaji": "myu",
                 "example_word": "みゅう (myuu - music)",
-                "options": [
+                "quiz_options": [
                     {"question": "みゅ", "options": ["myo", "myu", "sho", "nyu"], "answer": "myu"}
                 ],
             },
@@ -777,7 +777,7 @@ class Command(BaseCommand):
                 "symbol": "みょ",
                 "romaji": "myo",
                 "example_word": "みょう (myou - unusual)",
-                "options": [
+                "quiz_options": [
                     {"question": "みょ", "options": ["hyo", "myo", "kya", "cha"], "answer": "myo"}
                 ],
             },
@@ -785,7 +785,7 @@ class Command(BaseCommand):
                 "symbol": "りゃ",
                 "romaji": "rya",
                 "example_word": "りゃく (ryaku - abbreviation)",
-                "options": [
+                "quiz_options": [
                     {"question": "りゃ", "options": ["rya", "dyu", "hya", "pya"], "answer": "rya"}
                 ],
             },
@@ -793,7 +793,7 @@ class Command(BaseCommand):
                 "symbol": "りゅ",
                 "romaji": "ryu",
                 "example_word": "りゅう (ryuu - dragon)",
-                "options": [
+                "quiz_options": [
                     {"question": "りゅ", "options": ["ryu", "kya", "dyo", "gya"], "answer": "ryu"}
                 ],
             },
@@ -801,7 +801,7 @@ class Command(BaseCommand):
                 "symbol": "りょ",
                 "romaji": "ryo",
                 "example_word": "りょう (ryou - fee)",
-                "options": [
+                "quiz_options": [
                     {"question": "りょ", "options": ["dyo", "ryo", "pya", "myo"], "answer": "ryo"}
                 ],
             },
@@ -809,7 +809,7 @@ class Command(BaseCommand):
                 "symbol": "ぎゃ",
                 "romaji": "gya",
                 "example_word": "ぎゃく (gyaku - reverse)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぎゃ", "options": ["gya", "hyu", "dyo", "shu"], "answer": "gya"}
                 ],
             },
@@ -817,7 +817,7 @@ class Command(BaseCommand):
                 "symbol": "ぎゅ",
                 "romaji": "gyu",
                 "example_word": "ぎゅうにく (gyuuniku - beef)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぎゅ", "options": ["gyu", "hya", "mya", "nyo"], "answer": "gyu"}
                 ],
             },
@@ -825,7 +825,7 @@ class Command(BaseCommand):
                 "symbol": "ぎょ",
                 "romaji": "gyo",
                 "example_word": "ぎょう (gyou - business)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぎょ", "options": ["nyo", "hyo", "gyo", "nyu"], "answer": "gyo"}
                 ],
             },
@@ -833,7 +833,7 @@ class Command(BaseCommand):
                 "symbol": "ぴゃ",
                 "romaji": "pya",
                 "example_word": "ぴゃく (pyaku - hundred)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぴゃ", "options": ["kyo", "nyo", "pya", "dyu"], "answer": "pya"}
                 ],
             },
@@ -841,7 +841,7 @@ class Command(BaseCommand):
                 "symbol": "ぴゅ",
                 "romaji": "pyu",
                 "example_word": "ぴゅう (pyuu - sound of wind)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぴゅ", "options": ["pyu", "sho", "sha", "nyo"], "answer": "pyu"}
                 ],
             },
@@ -849,7 +849,7 @@ class Command(BaseCommand):
                 "symbol": "ぴょ",
                 "romaji": "pyo",
                 "example_word": "ぴょう (pyou - calculation)",
-                "options": [
+                "quiz_options": [
                     {"question": "ぴゅ", "options": ["pyu", "sho", "sha", "nyo"], "answer": "pyu"}
                 ],
             },
@@ -870,25 +870,25 @@ class Command(BaseCommand):
         for order_val, character in enumerate(script):
             obj, created = Character.objects.get_or_create(
                 script=LanguageScript.HIRAGANA,
-                symbol=character["symbol"],
+                # symbol=character["symbol"],
                 script_type=script_type,
                 order=order_val,
-                defaults={
-                    "romaji": character["romaji"],
-                    "example_word": character["example_word"],
-                },
+                defaults=character,
             )
             if created or not obj.audio:
                 # Collect objects for audio generation
                 characters_to_create.append(obj)
             else:
+                obj, created = Character.objects.update_or_create(
+                    script_type=script_type, order=order_val, defaults=character
+                )
                 self.stdout.write(
                     f"⏭ Skipped (already exists): {character['symbol']} ({character['romaji']})"
                 )
 
         # Bulk update characters with audio generation
-        for character in characters_to_create:
-            self.generate_audio_for_character(character)
+        # for character in characters_to_create:
+        #     self.generate_audio_for_character(character)
 
         self.stdout.write(self.style.SUCCESS("✅ Hiragana characters seeded and audio generated!"))
 

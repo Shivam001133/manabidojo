@@ -5,6 +5,7 @@ from manabhi_dojo.users.views import (
     home_view,
     dashboard,
     profile_view,
+    set_language,
 )
 
 app_name = "users"
@@ -16,4 +17,5 @@ urlpatterns = [
     path("dashboard/", dashboard, name="dashboard"),
     path("login/", LoginView.as_view(template_name="registration/login.html"), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("set-language/", set_language, name="set_language"),
 ]

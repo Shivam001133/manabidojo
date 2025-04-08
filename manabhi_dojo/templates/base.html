@@ -1,59 +1,61 @@
 {% load static %}
+{% load i18n %}
+
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth" id="html-root">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% block meta %}{% endblock %}
-  <title>{% block title %}Nihongo App{% endblock %}</title>
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
-  <!-- Script for theme (Dark/Light) -->
-  <script>
-    (function() {
-      const theme = localStorage.getItem("theme");
-      if (theme === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    })();
-  </script>  
-
-  <!-- TailwindCSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          backgroundImage: {
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block meta %}
+    {% endblock meta %}
+    <title>
+      {% block title %}
+        {% trans "ManabiDojo" %}
+      {% endblock block %}
+    </title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}" />
+    <!-- Script for theme (Dark/Light) -->
+    <script>
+      (function() {
+        const theme = localStorage.getItem("theme");
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      })();
+    </script>
+    <!-- TailwindCSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            backgroundImage: {},
           },
         },
-      },
-    }
-  </script>
-  {% block style %}{% endblock %} 
-
-  <!-- Extra head content -->
-  {% block head %}{% endblock %}
-</head>
-<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
-
-  <!-- Navbar -->
-  {% include 'navbar.html' %}
-
-  <!-- Main page content -->
-  <main class="flex-grow">
-    {% block content %}
-    {% endblock %}
-  </main>
-
-  <!-- Footer -->
-  {% include 'footer.html' %}
-
-  <!-- Extra page scripts -->
-  {% block scripts %}{% endblock %}
-</body>
+      }
+    </script>
+    {% block style %}
+    {% endblock style %}
+    <!-- Extra head content -->
+    {% block head %}
+    {% endblock head %}
+  </head>
+  <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <!-- Navbar -->
+    {% include 'navbar.html' %}
+    <!-- Main page content -->
+    <main class="flex-grow">
+      {% block content %}
+      {% endblock content %}
+    </main>
+    <!-- Footer -->
+    {% include 'footer.html' %}
+    <!-- Extra page scripts -->
+    {% block scripts %}
+    {% endblock scripts %}
+  </body>
 </html>

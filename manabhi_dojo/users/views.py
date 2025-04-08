@@ -11,6 +11,9 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.http import Http404
+from django.http import HttpResponseRedirect
+from django.utils.translation import activate
+from django.conf import settings
 
 from manabhi_dojo.users.forms import UserSignUpForm
 from manabhi_dojo.users.models import User, Profile
@@ -23,6 +26,14 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
 
 user_detail_view = UserDetailView.as_view()
+
+
+def set_language(request):
+    user_language = request.POST.get("language")
+    activate(user_language)
+    response = HttpResponseRedirect(request.headers.get("referer"))
+    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_language)
+    return response
 
 
 class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):

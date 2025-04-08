@@ -60,6 +60,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -128,7 +129,18 @@ AUTH_PASSWORD_VALIDATORS = [
 ## Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = 'en'  # Default language (English)
+
+LANGUAGES = [
+    ('en', 'English'),
+    ('ja', 'Japanese'),
+]
+
+# Directory for your translation files
+LOCALE_PATHS = [
+    path.join(BASE_DIR, 'locale'),
+]
+USE_I18N = True
 
 TIME_ZONE = "UTC"
 
