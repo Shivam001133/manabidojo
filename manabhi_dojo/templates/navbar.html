@@ -2,7 +2,7 @@
 {% load i18n %}
 
 <!-- Navbar -->
-<nav class="sticky top-0 z-50 bg-white dark:bg-gray-900 shadow-sm dark:shadow dark:shadow-gray-800">
+<nav class="sticky top-0 z-40 bg-white dark:bg-gray-900 shadow-sm dark:shadow dark:shadow-gray-800">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16 items-center">
       <!-- Logo / App Name -->
@@ -117,12 +117,17 @@
   function toggleTheme() {
     const html = document.documentElement;
     const icon = document.getElementById("theme-icon");
+    const drawerIcon = document.getElementById("drawer-theme-icon");
+    
     html.classList.toggle('dark');
+    
     if (html.classList.contains('dark')) {
       icon.textContent = '🌜';
+      if (drawerIcon) drawerIcon.textContent = '🌜';
       localStorage.setItem('theme', 'dark');
     } else {
       icon.textContent = '🌞';
+      if (drawerIcon) drawerIcon.textContent = '🌞';
       localStorage.setItem('theme', 'light');
     }
   }
