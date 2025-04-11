@@ -1,132 +1,134 @@
 {% extends "base.html" %}
+
 {% load static %}
 
-{% block title %}{{ title }}{% endblock %}
-
+{% block title %}
+  {{ title }}
+{% endblock title %}
 {% block style %}
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-<style>
-  .animate-click {
-    animation: click 0.3s ease-in-out;
-  }
-  @keyframes click {
-    0% { transform: scale(1); }
-    50% { transform: scale(0.95); }
-    100% { transform: scale(1); }
-  }
-</style>
-{% endblock %}
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+        rel="stylesheet" />
+  <style>
+    .animate-click {
+      animation: click 0.3s ease-in-out;
+    }
 
+    @keyframes click {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(0.95);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+  </style>
+{% endblock style %}
 {% block content %}
-<div class="bg-white py-8 px-4">
-  <div class="max-w-7xl mx-auto">
-    <div class="flex justify-center mb-6 px-4">
-      <h1 class="bg-black text-white rounded-full px-4 py-2 font-bold text-center text-lg sm:text-xl md:text-2xl max-w-xs sm:max-w-md w-full">
-        HIRAGANA CHART <span class="text-xs sm:text-sm">TOFUGU.COM</span>
-      </h1>
-    </div>    
-
-    <div class="flex flex-col md:flex-row gap-4">
-      <div class="rounded-lg bg-white p-4 flex-1 shadow-md">
-        <h2 class="font-bold mb-4">BASIC HIRAGANA</h2>
-        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {% for char in basic %}
-            {% if forloop.counter <= 46 %}
-              <div class="aspect-w-1 aspect-h-1">
-                <div 
-                  class="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center relative w-full h-full cursor-pointer transition-transform duration-300 active:scale-95"
-                  id="kana-card-{{ char.id }}"
-                  onclick="playAudio('{{ char.id }}')"
-                >
-                  <span class="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white rounded-full px-2 py-1 text-xs whitespace-nowrap">{{ char.romaji|upper }}</span>
-                  <div class="text-4xl text-purple-500 font-bold mt-4 mb-4">{{ char.symbol }}</div>
-                  <div class="bg-gray-100 rounded-md w-4/5 py-1 text-center text-purple-500 font-medium">
-                    <span>{{ char.romaji|upper }}</span>
-                  </div>
-                </div>
-                {% if char.audio %}
-                  <audio id="audio-{{ char.id }}">
-                    <source src="{{ char.audio.url }}" type="audio/mpeg">
-                  </audio>
-                {% endif %}
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
+  <div class="bg-white py-8 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex justify-center mb-6 px-4">
+        <h1 class="bg-black text-white rounded-full px-4 py-2 font-bold text-center text-lg sm:text-xl md:text-2xl max-w-xs sm:max-w-md w-full">
+          HIRAGANA CHART
+          <!-- <span class="text-xs sm:text-sm">TOFUGU.COM</span> -->
+        </h1>
       </div>
-
-      <div class="rounded-lg bg-white p-4 flex-1 shadow-md">
-        <h2 class="font-bold mb-4">DAKUTEN / HAN-DAKUTEN</h2>
-        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {% for char in dakuten %}
-            {% if forloop.counter <= 25 %}
-              <div class="aspect-w-1 aspect-h-1">
-                <div 
-                  class="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center relative w-full h-full cursor-pointer transition-transform duration-300 active:scale-95"
-                  id="kana-card-{{ char.id }}"
-                  onclick="playAudio('{{ char.id }}')"
-                >
-                  <span class="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white rounded-full px-2 py-1 text-xs whitespace-nowrap">{{ char.romaji|upper }}</span>
-                  <div class="text-4xl text-purple-500 font-bold mt-4 mb-4">{{ char.symbol }}</div>
-                  <div class="bg-gray-100 rounded-md w-4/5 py-1 text-center text-purple-500 font-medium">
-                    <span>{{ char.romaji|upper }}</span>
+      <div class="flex flex-col md:flex-row gap-4">
+        <div class="rounded-lg bg-white p-4 flex-1 shadow-md">
+          <h2 class="font-bold mb-4">BASIC HIRAGANA</h2>
+          <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {% for char in basic %}
+              {% if forloop.counter <= 46 %}
+                <div class="aspect-w-1 aspect-h-1">
+                  <div class="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center relative w-full h-full cursor-pointer transition-transform duration-300 active:scale-95"
+                       id="kana-card-{{ char.id }}"
+                       onclick="playAudio('{{ char.id }}')">
+                    <!-- <span class="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white rounded-full px-2 py-1 text-xs whitespace-nowrap">{{ char.romaji|upper }}</span> -->
+                    <div class="text-4xl text-purple-500 font-bold mt-4 mb-4">{{ char.symbol }}</div>
+                    <div class="bg-gray-100 rounded-md w-4/5 py-1 text-center text-purple-500 font-medium">
+                      <span>{{ char.romaji|upper }}</span>
+                    </div>
                   </div>
+                  {% if char.audio %}
+                    <audio id="audio-{{ char.id }}">
+                      <source src="{{ char.audio.url }}" type="audio/mpeg" />
+                    </audio>
+                  {% endif %}
                 </div>
-                {% if char.audio %}
-                  <audio id="audio-{{ char.id }}">
-                    <source src="{{ char.audio.url }}" type="audio/mpeg">
-                  </audio>
-                {% endif %}
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-
-    <div class="rounded-lg bg-white p-4 mt-4 shadow-md">
-      <h2 class="font-bold mb-4">COMBINATION</h2>
-      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-4">
-        {% for char in yoon %}
-          <div class="flex flex-col items-center">
-            <div 
-              class="bg-white rounded-2xl p-3 shadow-md transition duration-300 transform hover:-translate-y-1 flex flex-col items-center justify-center cursor-pointer relative"
-              id="kana-card-{{ char.id }}"
-              onclick="playAudio('{{ char.id }}')"
-            >
-              <span class="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white rounded-full px-2 py-1 text-xs whitespace-nowrap">{{ char.romaji|upper }}</span>
-              <div class="text-2xl font-bold text-purple-600">{{ char.symbol }}</div>
-              <div class="bg-gray-100 rounded-md shadow-inner w-16 h-8 flex items-center justify-center mt-2">
-                <span class="text-sm font-medium text-purple-700">{{ char.romaji|upper }}</span>
-              </div>
-            </div>
-            {% if char.audio %}
-              <audio id="audio-{{ char.id }}">
-                <source src="{{ char.audio.url }}" type="audio/mpeg">
-              </audio>
-            {% endif %}
+              {% endif %}
+            {% endfor %}
           </div>
-        {% endfor %}
+        </div>
+        <div class="rounded-lg bg-white p-4 flex-1 shadow-md">
+          <h2 class="font-bold mb-4">DAKUTEN / HAN-DAKUTEN</h2>
+          <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {% for char in dakuten %}
+              {% if forloop.counter <= 25 %}
+                <div class="aspect-w-1 aspect-h-1">
+                  <div class="bg-white rounded-2xl shadow-md p-4 flex flex-col items-center relative w-full h-full cursor-pointer transition-transform duration-300 active:scale-95"
+                       id="kana-card-{{ char.id }}"
+                       onclick="playAudio('{{ char.id }}')">
+                    <!-- <span class="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white rounded-full px-2 py-1 text-xs whitespace-nowrap">{{ char.romaji|upper }}</span> -->
+                    <div class="text-4xl text-purple-500 font-bold mt-4 mb-4">{{ char.symbol }}</div>
+                    <div class="bg-gray-100 rounded-md w-4/5 py-1 text-center text-purple-500 font-medium">
+                      <span>{{ char.romaji|upper }}</span>
+                    </div>
+                  </div>
+                  {% if char.audio %}
+                    <audio id="audio-{{ char.id }}">
+                      <source src="{{ char.audio.url }}" type="audio/mpeg" />
+                    </audio>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="rounded-lg bg-white p-4 mt-4 shadow-md">
+        <h2 class="font-bold mb-4">COMBINATION</h2>
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-4">
+          {% for char in yoon %}
+            <div class="flex flex-col items-center">
+              <div class="bg-white rounded-2xl p-3 shadow-md transition duration-300 transform hover:-translate-y-1 flex flex-col items-center justify-center cursor-pointer relative"
+                   id="kana-card-{{ char.id }}"
+                   onclick="playAudio('{{ char.id }}')">
+                <!-- <span class="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white rounded-full px-2 py-1 text-xs whitespace-nowrap">{{ char.romaji|upper }}</span> -->
+                <div class="text-2xl font-bold text-purple-600">{{ char.symbol }}</div>
+                <div class="bg-gray-100 rounded-md shadow-inner w-16 h-8 flex items-center justify-center mt-2">
+                  <span class="text-sm font-medium text-purple-700">{{ char.romaji|upper }}</span>
+                </div>
+              </div>
+              {% if char.audio %}
+                <audio id="audio-{{ char.id }}">
+                  <source src="{{ char.audio.url }}" type="audio/mpeg" />
+                </audio>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
-</div>
+  <script>
+    function playAudio(id) {
+      const audio = document.getElementById(`audio-${id}`);
+      const card = document.getElementById(`kana-card-${id}`);
 
-<script>
-  function playAudio(id) {
-    const audio = document.getElementById(`audio-${id}`);
-    const card = document.getElementById(`kana-card-${id}`);
+      if (audio) {
+        audio.load(); // Ensure it loads correctly
+        audio.currentTime = 0;
+        audio.play().catch(err => console.error("Audio play error:", err));
+      } else {
+        console.warn(`Missing audio: audio-${id}`);
+      }
 
-    if (audio) {
-      audio.load(); // Ensure it loads correctly
-      audio.currentTime = 0;
-      audio.play().catch(err => console.error("Audio play error:", err));
-    } else {
-      console.warn(`Missing audio: audio-${id}`);
+      card.classList.add("animate-click");
+      setTimeout(() => card.classList.remove("animate-click"), 300);
     }
-
-    card.classList.add("animate-click");
-    setTimeout(() => card.classList.remove("animate-click"), 300);
-  }
-</script>
+  </script>
 {% endblock content %}

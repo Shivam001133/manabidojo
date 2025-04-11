@@ -1,193 +1,196 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
-{% block title %}User Profile - Nihongo App{% endblock %}
-
+{% block title %}
+  User Profile - Nihongo App
+{% endblock title %}
 {% block style %}
-<style>
-  /* Profile and settings layout */
-  .profile-header {
-    background-image: url('{% static "img/japanese-garden.png" %}');
-    background-size: cover;
-    background-position: center;
-    padding: 50px;
-    color: white;
-    text-align: center;
-    border-radius: 10px;
-  }
+  <style>
+    /* Profile and settings layout */
+    .profile-header {
+      background-image: url('{% static "img/japanese-garden.png" %}');
+      background-size: cover;
+      background-position: center;
+      padding: 50px;
+      color: white;
+      text-align: center;
+      border-radius: 10px;
+    }
 
-  .profile-avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    margin: 10px auto;
-  }
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: 10px auto;
+    }
 
-  .profile-info {
-    margin-top: 20px;
-    font-size: 1.2rem;
-    color: #4A5568;
-  }
+    .profile-info {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #4A5568;
+    }
 
-  .badge-container {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 20px;
-  }
+    .badge-container {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
 
-  .badge {
-    width: 40px;
-    height: 40px;
-    background-color: #EDF2F7;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 5px;
-    font-size: 1.2rem;
-    text-align: center;
-    cursor: pointer;
-  }
+    .badge {
+      width: 40px;
+      height: 40px;
+      background-color: #EDF2F7;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 5px;
+      font-size: 1.2rem;
+      text-align: center;
+      cursor: pointer;
+    }
 
-  .badge:hover {
-    background-color: #E2E8F0;
-  }
+    .badge:hover {
+      background-color: #E2E8F0;
+    }
 
-  .settings-container {
-    margin-top: 50px;
-  }
+    .settings-container {
+      margin-top: 50px;
+    }
 
-  .setting-item {
-    margin-bottom: 20px;
-  }
+    .setting-item {
+      margin-bottom: 20px;
+    }
 
-  .setting-label {
-    font-size: 1.2rem;
-    margin-bottom: 5px;
-  }
+    .setting-label {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
 
-  .setting-control {
-    font-size: 1rem;
-  }
+    .setting-control {
+      font-size: 1rem;
+    }
 
-  .toggle-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-  .toggle-container input {
-    width: 40px;
-    height: 20px;
-    border-radius: 20px;
-    appearance: none;
-    background-color: #E2E8F0;
-    position: relative;
-    cursor: pointer;
-  }
+    .toggle-container input {
+      width: 40px;
+      height: 20px;
+      border-radius: 20px;
+      appearance: none;
+      background-color: #E2E8F0;
+      position: relative;
+      cursor: pointer;
+    }
 
-  .toggle-container input:checked {
-    background-color: #4FD1C5;
-  }
+    .toggle-container input:checked {
+      background-color: #4FD1C5;
+    }
 
-  .toggle-container input:before {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: white;
-    transition: 0.3s;
-  }
+    .toggle-container input:before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: white;
+      transition: 0.3s;
+    }
 
-  .toggle-container input:checked:before {
-    left: 20px;
-  }
-
-</style>
-{% endblock %}
-
+    .toggle-container input:checked:before {
+      left: 20px;
+    }
+  </style>
+{% endblock style %}
 {% block content %}
-<div class="container mx-auto p-6">
-  <!-- Profile Header -->
-  <div class="profile-header">
-    <img src="{% if user_profile.avatar %}{{ user_profile.avatar.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}" alt="Profile Avatar" class="profile-avatar">
-    <div class="text-3xl font-bold">{{ user_profile.user.username }}</div>
-    <div class="profile-info">
-      <p>Streak: {{ user_profile.streak }} days</p>
-      <p>Points: {{ user_profile.total_points }}</p>
-    </div>
-  </div>
-
-  <!-- Badges Section -->
-  <div class="badge-container">
-    {% for badge in user_profile.badges.all %}
-      <div class="badge" title="{{ badge.name }}">
-        <img src="{% if badge.icon %}{{ badge.icon.url }}{% else %}{% static 'img/default-badge.png' %}{% endif %}" alt="{{ badge.name }}" width="30" height="30">
+  <div class="container mx-auto p-6">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <img src="{% if user_profile.avatar %}{{ user_profile.avatar.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
+           alt="Profile Avatar"
+           class="profile-avatar" />
+      <div class="text-3xl font-bold">{{ user_profile.user.username }}</div>
+      <div class="profile-info">
+        <p>Streak: {{ user_profile.streak }} days</p>
+        <p>Points: {{ user_profile.total_points }}</p>
       </div>
-    {% endfor %}
-  </div>
-
-  <!-- Settings Section -->
-  <div class="settings-container">
-    <h2 class="text-2xl font-bold mb-4">Settings</h2>
-
-    <!-- Light/Dark Mode Toggle -->
-    <div class="setting-item toggle-container">
-      <div class="setting-label">Light/Dark Mode</div>
-      <input type="checkbox" id="dark-mode-toggle" {% if user_profile.dark_mode %}checked{% endif %}>
     </div>
-
-    <!-- Text Size Adjustment -->
+    <!-- Badges Section -->
+    <div class="badge-container">
+      {% for badge in user_profile.badges.all %}
+        <div class="badge" title="{{ badge.name }}">
+          <img src="{% if badge.icon %}{{ badge.icon.url }}{% else %}{% static 'img/default-badge.png' %}{% endif %}"
+               alt="{{ badge.name }}"
+               width="30"
+               height="30" />
+        </div>
+      {% endfor %}
+    </div>
+    <!-- Settings Section -->
+    <div class="settings-container">
+      <h2 class="text-2xl font-bold mb-4">Settings</h2>
+      <!-- Light/Dark Mode Toggle -->
+      <div class="setting-item toggle-container">
+        <div class="setting-label">Light/Dark Mode</div>
+        <input type="checkbox"
+               id="dark-mode-toggle"
+               {% if user_profile.dark_mode %}checked{% endif %} />
+      </div>
+      <!-- Text Size Adjustment -->
+      <div class="setting-item">
+        <div class="setting-label">Text Size</div>
+        <select class="setting-control" id="text-size-select">
+          <option value="small"
+                  {% if user_profile.text_size == 'small' %}selected{% endif %}>Small</option>
+          <option value="medium"
+                  {% if user_profile.text_size == 'medium' %}selected{% endif %}>Medium</option>
+          <option value="large"
+                  {% if user_profile.text_size == 'large' %}selected{% endif %}>Large</option>
+        </select>
+      </div>
+      <!-- Language Select -->
+      <div class="setting-item">
+        <div class="setting-label">Language</div>
+        <select class="setting-control" id="language-select">
+          <option value="en" {% if user_profile.language == 'en' %}selected{% endif %}>English</option>
+          <option value="ja" {% if user_profile.language == 'ja' %}selected{% endif %}>Japanese</option>
+        </select>
+      </div>
+    </div>
     <div class="setting-item">
-      <div class="setting-label">Text Size</div>
-      <select class="setting-control" id="text-size-select">
-        <option value="small" {% if user_profile.text_size == 'small' %}selected{% endif %}>Small</option>
-        <option value="medium" {% if user_profile.text_size == 'medium' %}selected{% endif %}>Medium</option>
-        <option value="large" {% if user_profile.text_size == 'large' %}selected{% endif %}>Large</option>
-      </select>
+      <div class="setting-label">
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="text-red-500 hover:underline">Logout</button>
+        </form>
+      </div>
     </div>
+    <script>
+      // Handle Dark Mode toggle
+      document.getElementById('dark-mode-toggle').addEventListener('change', function() {
+        document.body.classList.toggle('dark', this.checked);
+        // You may want to save this preference in the user's settings model
+      });
 
-    <!-- Language Select -->
-    <div class="setting-item">
-      <div class="setting-label">Language</div>
-      <select class="setting-control" id="language-select">
-        <option value="en" {% if user_profile.language == 'en' %}selected{% endif %}>English</option>
-        <option value="ja" {% if user_profile.language == 'ja' %}selected{% endif %}>Japanese</option>
-      </select>
-    </div>
+      // Handle text size adjustment
+      document.getElementById('text-size-select').addEventListener('change', function() {
+        const textSize = this.value;
+        document.body.style.fontSize = textSize === 'small' ? '12px' : textSize === 'medium' ? '16px' : '20px';
+        // Save the preference in the user's settings model
+      });
 
-  </div>
-  <div class="setting-item">
-    <div class="setting-label"> 
-      <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit" class="text-red-500 hover:underline">Logout</button>
-      </form>      
-  </div>
-</div>
-
-<script>
-  // Handle Dark Mode toggle
-  document.getElementById('dark-mode-toggle').addEventListener('change', function() {
-    document.body.classList.toggle('dark', this.checked);
-    // You may want to save this preference in the user's settings model
-  });
-
-  // Handle text size adjustment
-  document.getElementById('text-size-select').addEventListener('change', function() {
-    const textSize = this.value;
-    document.body.style.fontSize = textSize === 'small' ? '12px' : textSize === 'medium' ? '16px' : '20px';
-    // Save the preference in the user's settings model
-  });
-
-  // Handle language selection
-  document.getElementById('language-select').addEventListener('change', function() {
-    const language = this.value;
-    // You can change the app language dynamically here, or save the setting for later
-    alert('Language changed to ' + language);
-  });
-</script>
-{% endblock %}
+      // Handle language selection
+      document.getElementById('language-select').addEventListener('change', function() {
+        const language = this.value;
+        // You can change the app language dynamically here, or save the setting for later
+        alert('Language changed to ' + language);
+      });
+    </script>
+  {% endblock content %}

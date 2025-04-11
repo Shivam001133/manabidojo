@@ -887,8 +887,8 @@ class Command(BaseCommand):
                 )
 
         # Bulk update characters with audio generation
-        # for character in characters_to_create:
-        #     self.generate_audio_for_character(character)
+        for character in characters_to_create:
+            self.generate_audio_for_character(character)
 
         self.stdout.write(self.style.SUCCESS("✅ Hiragana characters seeded and audio generated!"))
 
