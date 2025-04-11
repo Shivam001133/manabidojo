@@ -24,9 +24,9 @@
         <!-- Dropdown button -->
         <div class="relative inline-block text-left">
           <button type="button"
-                  class="inline-flex justify-center w-full rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                  id="menu-button"
-                  aria-expanded="true"
+                  class="inline-flex justify-center px-2 w-full rounded-md border border-gray-300 dark:border-gray-700 shadow-sm bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                  id="quiz-dropdown-button"
+                  aria-expanded="false"
                   aria-haspopup="true">
             QUIZ
             <svg class="-mr-1 ml-2 h-5 w-5"
@@ -38,23 +38,23 @@
             </svg>
           </button>
           <!-- Dropdown menu -->
-          <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+          <div class="hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
                role="menu"
                aria-orientation="vertical"
-               aria-labelledby="menu-button"
-               id="menu">
+               aria-labelledby="quiz-dropdown-button"
+               id="quiz-dropdown-menu">
             <div class="py-1" role="none">
               <a href="{% url 'languages:hquiz' %}"
-                 class="text-gray-700 block px-4 py-2 text-sm"
+                 class="text-gray-700 dark:text-gray-200 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                  role="menuitem">Hiragana Quiz</a>
               <a href="#"
-                 class="text-gray-700 block px-4 py-2 text-sm"
+                 class="text-gray-700 dark:text-gray-200 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                  role="menuitem">Katakana Quiz</a>
               <a href="#"
-                 class="text-gray-700 block px-4 py-2 text-sm"
+                 class="text-gray-700 dark:text-gray-200 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                  role="menuitem">Kanji Quiz</a>
               <a href="#"
-                 class="text-gray-700 block px-4 py-2 text-sm"
+                 class="text-gray-700 dark:text-gray-200 block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                  role="menuitem">Word Quiz</a>
             </div>
           </div>
@@ -68,7 +68,7 @@
         </button>
         <!-- Mobile Menu Button -->
         <button class="md:hidden text-gray-800 dark:text-gray-200"
-                onclick="toggleMobileMenu()">
+                onclick="toggleDrawer()">
           <svg class="w-6 h-6"
                fill="none"
                stroke="currentColor"
@@ -82,36 +82,119 @@
       </div>
     </div>
   </div>
-  <!-- Mobile Menu -->
-  <div id="mobile-menu"
-       class="hidden md:hidden px-4 pb-4 space-y-2 text-gray-700 dark:text-gray-200">
-    <a href="{% url 'users:dashboard' %}"
-       class="block hover:text-indigo-500 dark:hover:text-indigo-400">Dashboard</a>
-    <a href="{% url 'languages:hiragana' %}"
-       class="block hover:text-indigo-500 dark:hover:text-indigo-400">Hiragana</a>
-    <a href="{% url 'languages:katakana' %}"
-       class="block hover:text-indigo-500 dark:hover:text-indigo-400">Katakana</a>
-    <a href="{% url 'languages:kanji' %}"
-       class="block hover:text-indigo-500 dark:hover:text-indigo-400">Kanji</a>
-    <a href="{% url 'users:profile' %}"
-       class="block hover:text-indigo-500 dark:hover:text-indigo-400">Profile</a>
-  </div>
 </nav>
-<!-- JavaScript for Theme Toggle -->
+
+<!-- Mobile Drawer -->
+<div id="mobile-drawer" class="fixed inset-0 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+  <!-- Backdrop -->
+  <div id="drawer-backdrop" class="absolute inset-0 bg-black bg-opacity-30" onclick="toggleDrawer()"></div>
+  
+  <!-- Drawer Content -->
+  <div class="absolute left-0 top-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg transform">
+    <!-- Drawer Header -->
+    <div class="flex justify-between items-center p-4 border-b dark:border-gray-700">
+      <h3 class="text-lg font-medium text-gray-800 dark:text-white">Menu</h3>
+      <button onclick="toggleDrawer()" class="text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Drawer Body -->
+    <div class="py-4 px-4 space-y-4 text-gray-700 dark:text-gray-200 overflow-y-auto h-full">
+      <a href="{% url 'users:dashboard' %}"
+         class="block py-2 hover:text-indigo-500 dark:hover:text-indigo-400">Dashboard</a>
+      <a href="{% url 'languages:hiragana' %}"
+         class="block py-2 hover:text-indigo-500 dark:hover:text-indigo-400">Hiragana</a>
+      <a href="{% url 'languages:katakana' %}"
+         class="block py-2 hover:text-indigo-500 dark:hover:text-indigo-400">Katakana</a>
+      <a href="{% url 'languages:kanji' %}"
+         class="block py-2 hover:text-indigo-500 dark:hover:text-indigo-400">Kanji</a>
+      <a href="{% url 'users:profile' %}"
+         class="block py-2 hover:text-indigo-500 dark:hover:text-indigo-400">Profile</a>
+      
+      <!-- Quiz Submenu -->
+      <div class="mt-2">
+        <div class="font-medium mb-2">Quiz Options</div>
+        <div class="pl-4 space-y-2">
+          <a href="{% url 'languages:hquiz' %}"
+             class="block py-2 hover:text-indigo-500 dark:hover:text-indigo-400">Hiragana Quiz</a>
+          <a href="#"
+             class="block py-2 hover:text-indigo-500 dark:hover:text-indigo-400">Katakana Quiz</a>
+          <a href="#"
+             class="block py-2 hover:text-indigo-500 dark:hover:text-indigo-400">Kanji Quiz</a>
+          <a href="#"
+             class="block py-2 hover:text-indigo-500 dark:hover:text-indigo-400">Word Quiz</a>
+        </div>
+      </div>
+      
+      <!-- Theme Toggle in Drawer -->
+      <div class="pt-4 mt-4 border-t dark:border-gray-700">
+        <button onclick="toggleTheme()" class="flex items-center space-x-2 text-gray-700 dark:text-gray-200">
+          <span id="drawer-theme-icon" class="text-xl">🌞</span>
+          <span>Toggle Theme</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for Theme Toggle, Dropdown and Drawer -->
 <script>
   // Load saved theme on page load
   document.addEventListener("DOMContentLoaded", function() {
     const theme = localStorage.getItem('theme');
     const icon = document.getElementById("theme-icon");
+    const drawerIcon = document.getElementById("drawer-theme-icon");
     const html = document.documentElement;
+    
     if (theme === 'dark') {
       html.classList.add('dark');
       icon.textContent = '🌜';
+      if (drawerIcon) drawerIcon.textContent = '🌜';
     } else {
       html.classList.remove('dark');
       icon.textContent = '🌞';
+      if (drawerIcon) drawerIcon.textContent = '🌞';
     }
+    
+    // Setup quiz dropdown toggle
+    setupQuizDropdown();
   });
+
+  // Setup quiz dropdown functionality
+  function setupQuizDropdown() {
+    const dropdownButton = document.getElementById('quiz-dropdown-button');
+    const dropdownMenu = document.getElementById('quiz-dropdown-menu');
+    
+    if (dropdownButton && dropdownMenu) {
+      // Toggle dropdown on button click
+      dropdownButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+        dropdownButton.setAttribute('aria-expanded', 
+          dropdownButton.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'
+        );
+      });
+      
+      // Close dropdown when clicking elsewhere
+      document.addEventListener('click', function(e) {
+        if (!dropdownButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+          dropdownMenu.classList.add('hidden');
+          dropdownButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Close dropdown when pressing escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !dropdownMenu.classList.contains('hidden')) {
+          dropdownMenu.classList.add('hidden');
+          dropdownButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+  }
 
   // Toggle theme between light and dark
   function toggleTheme() {
@@ -132,9 +215,18 @@
     }
   }
 
-  // Toggle mobile menu visibility
-  function toggleMobileMenu() {
-    const menu = document.getElementById('mobile-menu');
-    menu.classList.toggle('hidden');
+  // Toggle drawer visibility
+  function toggleDrawer() {
+    const drawer = document.getElementById('mobile-drawer');
+    const body = document.body;
+    
+    drawer.classList.toggle('-translate-x-full');
+    
+    // Toggle body scroll
+    if (drawer.classList.contains('-translate-x-full')) {
+      body.style.overflow = '';
+    } else {
+      body.style.overflow = 'hidden';
+    }
   }
 </script>
