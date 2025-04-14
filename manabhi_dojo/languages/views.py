@@ -75,25 +75,23 @@ def kanji_view(request):
 
 
 def hiragana_quiz(request):
-    # Fetch all quiz options for Hiragana characters
     hiragana_list = Character.objects.filter(script=LanguageScript.HIRAGANA)
-
-    # Get a random question (using the first quiz option)
     current_question = random.choice(hiragana_list).quiz_options[0]
+
+    current_answer = request.session.get("current_question", None)
+    if current_answer:
+        current_answer = current_answer["answer"]
+    request.session['current_question'] = current_question
+    request.session.set_expiry(60)
 
     if request.method == "POST":
         selected_answer = request.POST.get("answer")
-        is_correct = selected_answer == current_question["answer"]
-
-        # Send the result and the next question
-        next_question = random.choice(hiragana_list).quiz_options[0]  # New random question
+        is_correct = selected_answer == current_answer
 
         return JsonResponse(
-            {   "answer": current_question["answer"],
+            {   "answer": current_answer,
                 "is_correct": is_correct,
-                "next_question": next_question,  # Provide a new random question
+                "next_question": current_question,
             }
         )
-
-    # Render the initial page with a random question
     return render(request, "pages/quiz.html", {"question": current_question})

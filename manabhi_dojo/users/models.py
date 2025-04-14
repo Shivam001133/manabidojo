@@ -7,8 +7,29 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
 from manabhi_dojo.users.managers import UserManager
+from manabhi_dojo.languages.models import Character
 
 
+## User choices and other common models
+class UserProgressType(models.TextChoices):
+    NONE = "none", _("None")
+    SCRIPT = "sc", _("Script")
+    KANJI = "kj", _("Kanji")
+    VOCABULARY = "vc", _("Vocabulary")
+    GRAMMAR = "gm", _("Grammar")
+    READING = "rd", _("Reading")
+    LISTENING = "ls", _("Listening")
+
+
+class UserJlptLevel(models.TextChoices):
+    N1 = "1", _("JLPT N1")
+    N2 = "2", _("JLPT N2")
+    N3 = "3", _("JLPT N3")
+    N4 = "4", _("JLPT N4")
+    N5 = "5", _("JLPT N5")
+
+
+## User models 
 class User(AbstractUser):
     """
     Default custom user model for MangaLab.
@@ -51,5 +72,30 @@ class Profile(models.Model):
         return self.full_name or self.user.email or f"Profile #{self.pk}"
 
 
-# class ScriptProgres(models.Model):
-#     is_read = models.BooleanField(default=True)
+class ScriptProgres(models.Model):
+    script = models.ForeignKey(Character, on_delete=models.DO_NOTHING, related_name="scriptprogres_character")
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="scriptprogres_user")
+    currect = models.BooleanField(default=True)
+    progress_timestamp = models.JSONField(default=dict)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.script.script} - {self.user.email} - {self.currect}"
+
+
+class UserProgress(models.Model):
+    jlpt = models.CharField(
+        choices=UserJlptLevel.choices, default=UserJlptLevel.N5, max_length=10,
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_progress")
+    progress_type = models.CharField(
+        choices=UserProgressType.choices, default=UserProgressType.NONE, max_length=10,
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.jlpt} - {self.progress_type}"
