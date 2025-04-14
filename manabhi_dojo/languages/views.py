@@ -89,7 +89,7 @@ def hiragana_quiz(request):
         next_question = random.choice(hiragana_list).quiz_options[0]  # New random question
 
         return JsonResponse(
-            {
+            {   "answer": current_question["answer"],
                 "is_correct": is_correct,
                 "next_question": next_question,  # Provide a new random question
             }
