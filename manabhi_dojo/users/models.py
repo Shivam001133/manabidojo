@@ -29,7 +29,7 @@ class UserJlptLevel(models.TextChoices):
     N5 = "5", _("JLPT N5")
 
 
-## User models 
+## User models
 class User(AbstractUser):
     """
     Default custom user model for MangaLab.
@@ -87,11 +87,15 @@ class ScriptProgres(models.Model):
 
 class UserProgress(models.Model):
     jlpt = models.CharField(
-        choices=UserJlptLevel.choices, default=UserJlptLevel.N5, max_length=10,
+        choices=UserJlptLevel.choices,
+        default=UserJlptLevel.N5,
+        max_length=10,
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_progress")
     progress_type = models.CharField(
-        choices=UserProgressType.choices, default=UserProgressType.NONE, max_length=10,
+        choices=UserProgressType.choices,
+        default=UserProgressType.NONE,
+        max_length=10,
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
