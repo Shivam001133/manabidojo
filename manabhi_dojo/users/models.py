@@ -73,7 +73,9 @@ class Profile(models.Model):
 
 
 class ScriptProgres(models.Model):
-    script = models.ForeignKey(Character, on_delete=models.DO_NOTHING, related_name="scriptprogres_character")
+    script = models.ForeignKey(
+        Character, on_delete=models.DO_NOTHING, related_name="scriptprogres_character"
+    )
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="scriptprogres_user")
     currect = models.BooleanField(default=True)
     progress_timestamp = models.JSONField(default=dict)
