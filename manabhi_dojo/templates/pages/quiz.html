@@ -1,129 +1,354 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="quiz-container">
-    <section class="text-center py-10">
-      <h1 class="text-3xl font-semibold mb-6">Hiragana Quiz</h1>
-      <!-- Hiragana character display -->
-      <div class="mb-6">
-        <p id="question">{{ question.question }}</p>
+<div class="quiz-container h-[100dvh] flex items-center justify-center bg-gray-50">
+  <section class="w-full max-w-2xl mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md overflow-hidden h-fit">
+    <h1 class="text-3xl font-bold mb-4 text-purple-700 text-center">Hiragana Quiz</h1>
+
+    <!-- Progress bar -->
+    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+      <div id="progress-bar" class="bg-purple-600 h-2.5 rounded-full" style="width: 0%"></div>
+    </div>
+
+    <!-- Score and question counter -->
+    <div class="flex justify-between text-sm text-gray-600 mb-6">
+      <p>Question: <span id="question-counter">1</span>/<span id="total-questions">10</span></p>
+      <p>Score: <span id="score-display">0</span></p>
+    </div>
+
+    <!-- Question -->
+    <div class="mb-6 text-center">
+      <p id="question" class="text-6xl font-bold text-gray-800 mb-2">{{ question.question }}</p>
+      <p class="text-gray-500 text-sm">Select the correct romanization</p>
+    </div>
+
+    <!-- Options -->
+    <div class="grid grid-cols-2 gap-4 mb-6" id="options-container">
+      {% for option in question.options %}
+        <button class="option-button bg-white border-2 border-purple-500 text-purple-700 px-6 py-3 rounded-lg 
+                hover:bg-purple-50 transition-all text-lg font-medium w-full"
+                data-answer="{{ option }}">{{ option }}</button>
+      {% endfor %}
+    </div>
+
+    <!-- Feedback -->
+    <div id="feedback-area-wrapper" class="min-h-[80px]">
+      <div id="feedback-area" class="hidden mt-4 p-4 rounded-lg">
+        <p id="feedback-text" class="text-lg font-medium"></p>
+        <p id="correct-answer" class="text-sm mt-2"></p>
       </div>
-      <!-- Quiz options -->
-      <div class="flex justify-center space-x-4" id="options-container">
-        {% for option in question.options %}
-          <button class="option-button bg-purple-500 text-white px-4 py-2 rounded-full hover:bg-purple-600"
-                  data-answer="{{ option }}">{{ option }}</button>
-        {% endfor %}
+    </div>
+
+    <!-- Results Screen (Initially Hidden) -->
+    <div id="results-screen" class="hidden">
+      <div class="text-center p-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4 text-purple-800">Quiz Completed!</h2>
+        <p class="text-xl mb-2">Your final score: <span id="final-score" class="font-bold">0</span>/<span id="final-total">10</span></p>
+        <div id="performance-badge" class="inline-block px-4 py-2 rounded-full font-bold text-white mb-4"></div>
+        <p id="performance-feedback" class="text-lg mb-6"></p>
+        <div class="flex flex-col sm:flex-row justify-center gap-3">
+          <button id="retry-button" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition-all font-medium">
+            Try Again
+          </button>
+          <button id="practice-button" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-all font-medium">
+            Practice Mode
+          </button>
+        </div>
       </div>
-      <p id="feedback" class="hidden"></p>
-    </section>
-  </div>
+    </div>
+
+    <!-- Timer -->
+    <div class="w-full bg-gray-200 rounded-full h-1.5 mt-6">
+      <div id="timer-bar" class="bg-blue-500 h-1.5 rounded-full" style="width: 100%"></div>
+    </div>
+  </section>
+</div>
 {% endblock content %}
+
 {% block scripts %}
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const buttons = document.querySelectorAll(".option-button");
-      const feedbackElement = document.getElementById("feedback");
-      const questionElement = document.getElementById("question");
-      const optionsContainer = document.getElementById("options-container");
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const quizState = {
+      currentQuestion: 1,
+      totalQuestions: 10,
+      score: 0,
+      timePerQuestion: 30000,
+      timer: null,
+      timeoutTriggered: false,
+      incorrectAnswers: []
+    };
 
-      buttons.forEach(button => {
-        button.addEventListener("click", function() {
-          const selectedAnswer = button.dataset.answer;
+    const elements = {
+      questionElement: document.getElementById("question"),
+      optionsContainer: document.getElementById("options-container"),
+      feedbackArea: document.getElementById("feedback-area"),
+      feedbackText: document.getElementById("feedback-text"),
+      correctAnswer: document.getElementById("correct-answer"),
+      progressBar: document.getElementById("progress-bar"),
+      questionCounter: document.getElementById("question-counter"),
+      totalQuestions: document.getElementById("total-questions"),
+      scoreDisplay: document.getElementById("score-display"),
+      timerBar: document.getElementById("timer-bar"),
+      resultsScreen: document.getElementById("results-screen"),
+      finalScore: document.getElementById("final-score"),
+      finalTotal: document.getElementById("final-total"),
+      performanceBadge: document.getElementById("performance-badge"),
+      performanceFeedback: document.getElementById("performance-feedback"),
+      retryButton: document.getElementById("retry-button"),
+      practiceButton: document.getElementById("practice-button")
+    };
 
-          // Get CSRF token
-          const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    elements.totalQuestions.textContent = quizState.totalQuestions;
+    elements.finalTotal.textContent = quizState.totalQuestions;
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-          // Make a POST request to submit the answer
+    function submitAnswer(selectedAnswer) {
+      if (quizState.timer) clearInterval(quizState.timer);
+
+      fetch("{% url 'languages:hquiz' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": csrfToken
+        },
+        body: `answer=${encodeURIComponent(selectedAnswer)}&csrfmiddlewaretoken=${csrfToken}`
+      })
+        .then(response => response.json())
+        .then(data => {
+          showFeedback(data.is_correct, selectedAnswer, data?.answer);
+          if (data.is_correct) {
+            quizState.score++;
+            elements.scoreDisplay.textContent = quizState.score;
+          } else {
+            // Track incorrect answers for practice recommendations
+            quizState.incorrectAnswers.push({
+              question: elements.questionElement.textContent,
+              correctAnswer: data?.answer
+            });
+          }
+          
+          if (quizState.currentQuestion < quizState.totalQuestions) {
+            setTimeout(() => loadNextQuestion(data.next_question), 2000);
+          } else {
+            setTimeout(() => showResults(), 2000);
+          }
+        })
+        .catch(console.error);
+    }
+
+    function showFeedback(isCorrect, selectedAnswer, correctAnswer) {
+      const selectedBtn = Array.from(document.querySelectorAll(".option-button"))
+        .find(btn => btn.dataset.answer === selectedAnswer);
+
+      if (isCorrect) {
+        selectedBtn.classList.remove("bg-white", "text-purple-700");
+        selectedBtn.classList.add("bg-green-500", "text-white");
+        elements.feedbackArea.classList.add("bg-green-100");
+        elements.feedbackText.textContent = "Correct!";
+        elements.feedbackText.className = "text-lg font-medium text-green-700";
+        elements.correctAnswer.textContent = "";
+      } else if (quizState.timeoutTriggered) {
+        elements.feedbackArea.classList.add("bg-yellow-100");
+        elements.feedbackText.textContent = "Time's up!";
+        elements.feedbackText.className = "text-lg font-medium text-yellow-700";
+        elements.correctAnswer.textContent = `The correct answer is: ${correctAnswer}`;
+        elements.correctAnswer.className = "text-sm mt-2 text-yellow-700";
+      } else {
+        selectedBtn.classList.remove("bg-white", "text-purple-700");
+        selectedBtn.classList.add("bg-red-500", "text-white");
+        elements.feedbackArea.classList.add("bg-red-100");
+        elements.feedbackText.textContent = "Incorrect!";
+        elements.feedbackText.className = "text-lg font-medium text-red-700";
+        elements.correctAnswer.textContent = `The correct answer is: ${correctAnswer}`;
+        elements.correctAnswer.className = "text-sm mt-2 text-red-600";
+      }
+
+      elements.feedbackArea.classList.remove("hidden");
+    }
+
+    function loadNextQuestion(nextQuestion) {
+      quizState.currentQuestion++;
+      quizState.timeoutTriggered = false;
+      elements.feedbackArea.classList.add("hidden");
+      document.body.classList.remove("no-scroll");
+
+      elements.questionCounter.textContent = quizState.currentQuestion;
+      elements.progressBar.style.width = `${((quizState.currentQuestion - 1) / quizState.totalQuestions) * 100}%`;
+      elements.questionElement.textContent = nextQuestion.question;
+      elements.optionsContainer.innerHTML = "";
+
+      nextQuestion.options.forEach(option => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.dataset.answer = option;
+        button.className = "option-button bg-white border-2 border-purple-500 text-purple-700 px-6 py-3 rounded-lg hover:bg-purple-50 transition-all text-lg font-medium w-full";
+
+        button.addEventListener("click", function () {
+          document.querySelectorAll(".option-button").forEach(btn => {
+            btn.disabled = true;
+            btn.classList.add("opacity-50");
+          });
+          submitAnswer(option);
+        });
+
+        elements.optionsContainer.appendChild(button);
+      });
+
+      startTimer();
+    }
+
+    function showResults() {
+      // Hide quiz elements and show results
+      document.querySelector(".quiz-container section").classList.add("transition-all", "duration-300");
+      
+      // Update score display
+      elements.finalScore.textContent = quizState.score;
+      
+      // Determine performance level and feedback
+      let performanceLevel, badgeColor, feedbackText;
+      const scorePercentage = (quizState.score / quizState.totalQuestions) * 100;
+      
+      if (scorePercentage < 40) {
+        performanceLevel = "Needs Practice";
+        badgeColor = "bg-red-500";
+        feedbackText = "You're just getting started with hiragana. Regular practice will help you improve quickly!";
+      } else if (scorePercentage < 60) {
+        performanceLevel = "Basic";
+        badgeColor = "bg-orange-500";
+        feedbackText = "You have some knowledge of hiragana, but need more practice to become fluent.";
+      } else if (scorePercentage < 80) {
+        performanceLevel = "Average";
+        badgeColor = "bg-blue-500";
+        feedbackText = "You have a good grasp of hiragana! Keep practicing to master the characters.";
+      } else if (scorePercentage < 100) {
+        performanceLevel = "Advanced";
+        badgeColor = "bg-purple-600";
+        feedbackText = "Great job! You're nearly fluent with hiragana. Just a bit more practice to perfect!";
+      } else {
+        performanceLevel = "Master";
+        badgeColor = "bg-green-500";
+        feedbackText = "Perfect score! You've mastered hiragana recognition. Consider moving on to more advanced Japanese studies!";
+      }
+      
+      // Add specific recommendations based on incorrect answers
+      if (quizState.incorrectAnswers.length > 0) {
+        feedbackText += " Focus on practicing the characters you missed.";
+      }
+      
+      // Update the UI
+      elements.performanceBadge.textContent = performanceLevel;
+      elements.performanceBadge.className = `inline-block px-4 py-2 rounded-full font-bold text-white mb-4 ${badgeColor}`;
+      elements.performanceFeedback.textContent = feedbackText;
+      
+      // Hide quiz elements
+      elements.questionElement.parentElement.style.display = "none";
+      elements.optionsContainer.style.display = "none";
+      elements.feedbackArea.style.display = "none";
+      elements.timerBar.parentElement.style.display = "none";
+      document.querySelector(".flex.justify-between").style.display = "none";
+      
+      // Show results screen
+      elements.resultsScreen.classList.remove("hidden");
+      elements.resultsScreen.classList.add("animate-fade-in");
+      
+      // Set up button event listeners
+      elements.retryButton.addEventListener("click", function() {
+        window.location.reload();
+      });
+      
+      elements.practiceButton.addEventListener("click", function() {
+        // Here you would redirect to a practice mode focusing on missed characters
+        // For now we'll just reload, but in a real app this would go to a practice page
+        alert("Practice mode would focus on: " + 
+              quizState.incorrectAnswers.map(item => item.question).join(", "));
+        window.location.reload();
+      });
+    }
+
+    function startTimer() {
+      if (quizState.timer) clearInterval(quizState.timer);
+      elements.timerBar.style.width = "100%";
+      quizState.timeoutTriggered = false;
+
+      const duration = quizState.timePerQuestion;
+      const startTime = Date.now();
+
+      quizState.timer = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const remaining = Math.max(duration - elapsed, 0);
+        const percentage = (remaining / duration) * 100;
+        elements.timerBar.style.width = `${percentage}%`;
+
+        if (percentage < 30) {
+          elements.timerBar.classList.replace("bg-blue-500", "bg-red-500");
+        } else {
+          elements.timerBar.classList.replace("bg-red-500", "bg-blue-500");
+        }
+
+        if (remaining === 0) {
+          clearInterval(quizState.timer);
+          quizState.timer = null;
+          quizState.timeoutTriggered = true;
+          document.body.classList.add("no-scroll");
+
+          document.querySelectorAll(".option-button").forEach(btn => {
+            btn.disabled = true;
+            btn.classList.add("opacity-50");
+          });
+
           fetch("{% url 'languages:hquiz' %}", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-              },
-              body: `answer=${selectedAnswer}&csrfmiddlewaretoken=${csrfToken}`
-            })
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              "X-CSRFToken": csrfToken
+            },
+            body: `answer=&timeout=true&csrfmiddlewaretoken=${csrfToken}`
+          })
             .then(response => response.json())
             .then(data => {
-              // Feedback for correct or wrong answer
-              if (data.is_correct) {
-                feedbackElement.textContent = "Correct!";
-                feedbackElement.classList.remove("hidden");
-                button.classList.add("bg-green-500");
+              showFeedback(false, "", data?.answer);
+              
+              // Track timeout as incorrect answer
+              quizState.incorrectAnswers.push({
+                question: elements.questionElement.textContent,
+                correctAnswer: data?.answer
+              });
+              
+              if (quizState.currentQuestion < quizState.totalQuestions) {
+                setTimeout(() => loadNextQuestion(data.next_question), 2000);
               } else {
-                feedbackElement.textContent = "Wrong answer!";
-                feedbackElement.classList.remove("hidden");
-                button.classList.add("bg-red-500");
+                setTimeout(() => showResults(), 2000);
               }
-
-              // After some time, show the next question
-              setTimeout(() => {
-                // Update the question and options
-                questionElement.textContent = data.next_question.question;
-                optionsContainer.innerHTML = ''; // Clear previous options
-                data.next_question.options.forEach(option => {
-                  const newButton = document.createElement('button');
-                  newButton.textContent = option;
-                  newButton.classList.add("option-button", "bg-purple-500", "text-white", "px-4", "py-2", "rounded-full", "hover:bg-purple-600");
-                  newButton.dataset.answer = option;
-                  optionsContainer.appendChild(newButton); // Add new button to options container
-                });
-
-                // Hide feedback and reset button colors
-                feedbackElement.classList.add("hidden");
-                buttons.forEach(b => {
-                  b.classList.remove("bg-red-500", "bg-green-500");
-                });
-
-                // Re-bind the click event to new buttons (if necessary)
-                const newButtons = document.querySelectorAll(".option-button");
-                newButtons.forEach(button => {
-                  button.addEventListener("click", function() {
-                    // Handle click event for new question options
-                    const selectedAnswer = button.dataset.answer;
-                    // POST request to submit answer and get next question
-                    fetch("{% url 'languages:hquiz' %}", {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/x-www-form-urlencoded",
-                        },
-                        body: `answer=${selectedAnswer}&csrfmiddlewaretoken=${csrfToken}`
-                      })
-                      .then(response => response.json())
-                      .then(data => {
-                        if (data.is_correct) {
-                          feedbackElement.textContent = "Correct!";
-                          feedbackElement.classList.remove("hidden");
-                          button.classList.add("bg-green-500");
-                        } else {
-                          feedbackElement.textContent = "Wrong answer!";
-                          feedbackElement.classList.remove("hidden");
-                          button.classList.add("bg-red-500");
-                        }
-
-                        // After some time, show the next question
-                        setTimeout(() => {
-                          questionElement.textContent = data.next_question.question;
-                          optionsContainer.innerHTML = ''; // Clear previous options
-                          data.next_question.options.forEach(option => {
-                            const newButton = document.createElement('button');
-                            newButton.textContent = option;
-                            newButton.classList.add("option-button", "bg-purple-500", "text-white", "px-4", "py-2", "rounded-full", "hover:bg-purple-600");
-                            newButton.dataset.answer = option;
-                            optionsContainer.appendChild(newButton); // Add new button to options container
-                          });
-
-                          feedbackElement.classList.add("hidden");
-                          newButtons.forEach(b => {
-                            b.classList.remove("bg-red-500", "bg-green-500");
-                          });
-                        }, 1000); // Delay before showing next question
-                      });
-                  });
-                });
-              }, 1000); // Delay before showing next question
             });
+        }
+      }, 100);
+    }
+
+    // Initialize first question
+    document.querySelectorAll(".option-button").forEach(button => {
+      button.addEventListener("click", function () {
+        document.querySelectorAll(".option-button").forEach(btn => {
+          btn.disabled = true;
+          btn.classList.add("opacity-50");
         });
+        submitAnswer(this.dataset.answer);
       });
     });
-  </script>
+
+    // Add some CSS for animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+    `;
+    document.head.appendChild(style);
+
+    startTimer();
+  });
+</script>
 {% endblock scripts %}
